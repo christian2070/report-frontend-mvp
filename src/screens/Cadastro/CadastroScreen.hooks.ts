@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { useLayout } from '@/hooks/useLayout';
-import { useRequestHandler } from '@/hooks/useRequestHandler';
+import { useLoadingAction } from '@/hooks/useLoadingAction';
 import { authService } from '@/services/auth.service';
 import {
   cadastroSchema,
@@ -17,7 +17,7 @@ import { getHttpErrorStatus } from '@/utils/normalizeHttpError';
 export function useCadastroScreen() {
   const navigate = useNavigate();
   const { notify } = useLayout();
-  const { performRequestWithHandlers } = useRequestHandler();
+  const { execute } = useLoadingAction();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<CadastroFormValues>({
@@ -31,10 +31,10 @@ export function useCadastroScreen() {
   });
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    await performRequestWithHandlers({
-      setCustomLoader: setIsSubmitting,
+    await execute({
+      setLoading: setIsSubmitting,
       showErrorMessage: false,
-      onRequest: async () => {
+      action: async () => {
         await authService.register({
           nome: values.nome,
           email: values.email,

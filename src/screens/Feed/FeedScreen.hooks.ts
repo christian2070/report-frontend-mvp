@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useLayout } from '@/hooks/useLayout';
-import { useRequestHandler } from '@/hooks/useRequestHandler';
+import { useLoadingAction } from '@/hooks/useLoadingAction';
 import { alertasService } from '@/services/alertas.service';
 import { reportesService } from '@/services/reportes.service';
 import { CategoriaReporte, OrdenacaoFeed } from '@/types/enums';
@@ -42,7 +42,7 @@ async function fetchReportesPage(
 export function useFeedScreen({ tab }: UseFeedScreenOptions) {
   const { isCidadao } = useAuth();
   const { notify } = useLayout();
-  const { performRequestWithHandlers } = useRequestHandler();
+  const { execute } = useLoadingAction();
 
   const [reportes, setReportes] = useState<Reporte[]>([]);
   const [page, setPage] = useState(1);
@@ -55,9 +55,9 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
   const hasMore = page < totalPages;
 
   const loadPage = async (nextPage: number, replace: boolean) => {
-    await performRequestWithHandlers({
-      setCustomLoader: setIsLoading,
-      onRequest: async () => {
+    await execute({
+      setLoading: setIsLoading,
+      action: async () => {
         const response = await fetchReportesPage(
           tab,
           nextPage,
@@ -104,9 +104,9 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
       return;
     }
 
-    await performRequestWithHandlers({
+    await execute({
       showErrorMessage: false,
-      onRequest: async () => {
+      action: async () => {
         const response = reporte.jaAlertado
           ? await alertasService.remove(reporte.id)
           : await alertasService.create(reporte.id);

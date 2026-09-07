@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 import { useLayout } from '@/hooks/useLayout';
-import { useRequestHandler } from '@/hooks/useRequestHandler';
+import { useLoadingAction } from '@/hooks/useLoadingAction';
 import { reportesService } from '@/services/reportes.service';
 import {
   novoReporteSchema,
@@ -15,7 +15,7 @@ import { CategoriaReporte } from '@/types/enums';
 export function useNovoReporteScreen() {
   const navigate = useNavigate();
   const { notify } = useLayout();
-  const { performRequestWithHandlers } = useRequestHandler();
+  const { execute } = useLoadingAction();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -44,9 +44,9 @@ export function useNovoReporteScreen() {
   };
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    await performRequestWithHandlers({
-      setCustomLoader: setIsSubmitting,
-      onRequest: async () => {
+    await execute({
+      setLoading: setIsSubmitting,
+      action: async () => {
         await reportesService.create(values);
         notify('success', 'Sucesso', 'Reporte enviado com sucesso');
         navigate('/feed');

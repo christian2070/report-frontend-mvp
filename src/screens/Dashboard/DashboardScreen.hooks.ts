@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useRequestHandler } from '@/hooks/useRequestHandler';
+import { useLoadingAction } from '@/hooks/useLoadingAction';
 import { dashboardService } from '@/services/dashboard.service';
 import type { DashboardResumo } from '@/types/dashboard.types';
 
@@ -9,14 +9,14 @@ async function fetchDashboardResumo() {
 }
 
 export function useDashboardScreen() {
-  const { performRequestWithHandlers } = useRequestHandler();
+  const { execute } = useLoadingAction();
   const [resumo, setResumo] = useState<DashboardResumo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadResumo = async () => {
-    await performRequestWithHandlers({
-      setCustomLoader: setIsLoading,
-      onRequest: async () => {
+    await execute({
+      setLoading: setIsLoading,
+      action: async () => {
         const data = await fetchDashboardResumo();
         setResumo(data);
       },

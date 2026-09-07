@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useLayout } from '@/hooks/useLayout';
-import { useRequestHandler } from '@/hooks/useRequestHandler';
+import { useLoadingAction } from '@/hooks/useLoadingAction';
 import { authService } from '@/services/auth.service';
 import {
   loginSchema,
@@ -21,7 +21,7 @@ export function useLoginScreen() {
   const location = useLocation();
   const { login, setUsuario } = useAuth();
   const { notify } = useLayout();
-  const { performRequestWithHandlers } = useRequestHandler();
+  const { execute } = useLoadingAction();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<LoginFormValues>({
@@ -42,10 +42,10 @@ export function useLoginScreen() {
   }, [location, navigate, notify]);
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    await performRequestWithHandlers({
-      setCustomLoader: setIsSubmitting,
+    await execute({
+      setLoading: setIsSubmitting,
       showErrorMessage: false,
-      onRequest: async () => {
+      action: async () => {
         const response = await authService.login(values);
         login(response.token, response.usuario);
 

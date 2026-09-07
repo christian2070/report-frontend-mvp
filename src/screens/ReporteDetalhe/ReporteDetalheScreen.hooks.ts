@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useLayout } from '@/hooks/useLayout';
-import { useRequestHandler } from '@/hooks/useRequestHandler';
+import { useLoadingAction } from '@/hooks/useLoadingAction';
 import { alertasService } from '@/services/alertas.service';
 import { reportesService } from '@/services/reportes.service';
 import type { ApiError } from '@/types/api.types';
@@ -21,7 +21,7 @@ export function useReporteDetalheScreen() {
   const { id = '' } = useParams();
   const { usuario, isCidadao, isPrefeitura } = useAuth();
   const { notify } = useLayout();
-  const { performRequestWithHandlers } = useRequestHandler();
+  const { execute } = useLoadingAction();
 
   const [reporte, setReporte] = useState<Reporte | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,9 +33,9 @@ export function useReporteDetalheScreen() {
       return;
     }
 
-    await performRequestWithHandlers({
-      setCustomLoader: setIsLoading,
-      onRequest: async () => {
+    await execute({
+      setLoading: setIsLoading,
+      action: async () => {
         const data = await fetchReporteById(id);
         setReporte(data);
       },
@@ -58,10 +58,10 @@ export function useReporteDetalheScreen() {
       return;
     }
 
-    await performRequestWithHandlers({
-      setCustomLoader: setIsUpdatingAlerta,
+    await execute({
+      setLoading: setIsUpdatingAlerta,
       showErrorMessage: false,
-      onRequest: async () => {
+      action: async () => {
         const response = reporte.jaAlertado
           ? await alertasService.remove(reporte.id)
           : await alertasService.create(reporte.id);
@@ -103,9 +103,9 @@ export function useReporteDetalheScreen() {
       return;
     }
 
-    await performRequestWithHandlers({
-      setCustomLoader: setIsUpdatingStatus,
-      onRequest: async () => {
+    await execute({
+      setLoading: setIsUpdatingStatus,
+      action: async () => {
         const response = await reportesService.updateStatus(reporte.id, {
           status: nextStatus,
         });
