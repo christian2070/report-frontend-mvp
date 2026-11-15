@@ -9,8 +9,8 @@ export function LoadingOverlay() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-      <div className="rounded-xl bg-white p-4 shadow-lg">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/30 backdrop-blur-[1px]">
+      <div className="rounded-card border border-gray-200 bg-white p-5 shadow-lift">
         <Spinner size="lg" />
       </div>
     </div>

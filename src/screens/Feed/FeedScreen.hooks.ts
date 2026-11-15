@@ -66,10 +66,12 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
           ordenacao,
         );
 
-        setPage(response.page);
-        setTotalPages(response.totalPages);
+        const items = response.data ?? [];
+
+        setPage(response.page ?? nextPage);
+        setTotalPages(response.totalPages ?? 1);
         setReportes((current) =>
-          replace ? response.data : [...current, ...response.data],
+          replace ? items : [...(current ?? []), ...items],
         );
       },
     });

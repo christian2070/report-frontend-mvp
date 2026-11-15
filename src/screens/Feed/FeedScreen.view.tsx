@@ -1,10 +1,11 @@
-import { NavLink } from 'react-router';
-
 import { AlertaButton } from '@/components/AlertaButton/AlertaButton';
 import { FeedFilters } from '@/components/FeedFilters/FeedFilters';
 import { InfiniteScrollSentinel } from '@/components/InfiniteScrollSentinel/InfiniteScrollSentinel';
 import { ReporteCard } from '@/components/ReporteCard/ReporteCard';
-import { Spinner } from '@/components/ui/Spinner';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { PageTransition } from '@/components/ui/PageTransition';
+import { ReporteCardSkeleton } from '@/components/ui/Skeleton';
+import { Tabs } from '@/components/ui/Tabs';
 import type { useFeedScreen, FeedTab } from '@/screens/Feed/FeedScreen.hooks';
 import type { Reporte } from '@/types/reporte.types';
 
@@ -24,14 +25,9 @@ interface FeedScreenViewProps {
   onToggleAlerta: (reporte: Reporte) => void;
 }
 
-const tabClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-    isActive ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-100'
-  }`;
-
 export function FeedScreenView({
   tab,
-  reportes,
+  reportes = [],
   isLoading,
   hasMore,
   sentinelRef,
@@ -45,22 +41,21 @@ export function FeedScreenView({
   onToggleAlerta,
 }: FeedScreenViewProps) {
   return (
-    <div className="space-y-6">
+    <PageTransition className="space-y-6">
       <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Reportes recentes</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-display">Reportes</h1>
+        <p className="mt-2 text-sm text-gray-600">
           Acompanhe os problemas reportados na cidade
         </p>
       </div>
 
-      <div className="flex gap-2">
-        <NavLink to="/feed" end className={tabClass}>
-          Ativos
-        </NavLink>
-        <NavLink to="/feed/resolvidos" className={tabClass}>
-          Resolvidos
-        </NavLink>
-      </div>
+      <Tabs
+        layoutId="feed-tabs"
+        items={[
+          { to: '/feed', label: 'Ativos', end: true },
+          { to: '/feed/resolvidos', label: 'Resolvidos' },
+        ]}
+      />
 
       <FeedFilters
         categoria={categoria}
@@ -73,20 +68,30 @@ export function FeedScreenView({
       />
 
       {isLoading && reportes.length === 0 ? (
-        <div className="flex justify-center py-16">
-          <Spinner size="lg" />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <ReporteCardSkeleton key={index} />
+          ))}
         </div>
+      ) : reportes.length === 0 ? (
+        <EmptyState
+          title="Nenhum reporte encontrado"
+          description="Tente ajustar os filtros ou volte mais tarde para ver novos registros."
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
-          {reportes.map((reporte) => (
+          {reportes.map((reporte, index) => (
             <ReporteCard
               key={reporte.id}
               reporte={reporte}
+              index={index}
               showResolvedBadge={tab === 'resolvidos'}
               actionSlot={
                 tab === 'ativos' && isCidadao ? (
                   <AlertaButton
                     jaAlertado={reporte.jaAlertado}
+                    totalAlertas={reporte.totalAlertas}
+                    showCount
                     onClick={() => onToggleAlerta(reporte)}
                   />
                 ) : undefined
@@ -96,17 +101,11 @@ export function FeedScreenView({
         </div>
       )}
 
-      {!isLoading && reportes.length === 0 ? (
-        <p className="py-10 text-center text-sm text-gray-500">
-          Nenhum reporte encontrado
-        </p>
-      ) : null}
-
       <InfiniteScrollSentinel
         sentinelRef={sentinelRef}
-        isLoading={isLoading}
+        isLoading={isLoading && reportes.length > 0}
         hasMore={hasMore}
       />
-    </div>
+    </PageTransition>
   );
 }
