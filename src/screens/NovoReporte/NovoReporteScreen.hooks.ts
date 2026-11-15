@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
@@ -28,11 +28,13 @@ export function useNovoReporteScreen() {
     },
   });
 
-  const handlePhotoChange = (file: File | null) => {
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
+  const handlePhotoChange = (file: File | null) => {
     if (!file) {
       setPreviewUrl(null);
       form.resetField('foto');
