@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Button } from '@/components/ui/Button';
 import { FormField } from '@/components/ui/FormField';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import type { useLoginScreen } from '@/screens/Login/LoginScreen.hooks';
 
 interface LoginScreenViewProps {
@@ -39,8 +40,7 @@ export function LoginScreenView({
           </FormField>
 
           <FormField label="Senha" error={errors.senha?.message}>
-            <Input
-              type="password"
+            <PasswordInput
               hasError={Boolean(errors.senha)}
               {...register('senha')}
             />

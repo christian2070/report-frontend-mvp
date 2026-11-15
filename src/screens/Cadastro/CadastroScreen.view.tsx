@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { Button } from '@/components/ui/Button';
 import { FormField } from '@/components/ui/FormField';
 import { Input } from '@/components/ui/Input';
+import { PasswordInput } from '@/components/ui/PasswordInput';
 import type { useCadastroScreen } from '@/screens/Cadastro/CadastroScreen.hooks';
 
 interface CadastroScreenViewProps {
@@ -43,8 +44,7 @@ export function CadastroScreenView({
           </FormField>
 
           <FormField label="Senha" error={errors.senha?.message}>
-            <Input
-              type="password"
+            <PasswordInput
               hasError={Boolean(errors.senha)}
               {...register('senha')}
             />
