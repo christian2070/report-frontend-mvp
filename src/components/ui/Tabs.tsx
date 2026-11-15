@@ -10,15 +10,16 @@ interface TabItem {
 interface TabsProps {
   items: TabItem[];
   layoutId?: string;
+  className?: string;
 }
 
-export function Tabs({ items, layoutId = 'tabs-indicator' }: TabsProps) {
+export function Tabs({ items, layoutId = 'tabs-indicator', className = '' }: TabsProps) {
   const reduceMotion = useReducedMotion();
 
   return (
     <div
       role="tablist"
-      className="relative inline-flex rounded-pill border border-gray-200 bg-white p-1"
+      className={`relative flex w-full rounded-pill bg-gray-100 p-1 sm:inline-flex sm:w-auto ${className}`}
     >
       {items.map((item) => (
         <NavLink
@@ -27,8 +28,8 @@ export function Tabs({ items, layoutId = 'tabs-indicator' }: TabsProps) {
           end={item.end}
           role="tab"
           className={({ isActive }) =>
-            `relative z-10 rounded-pill px-5 py-2 text-sm font-semibold transition-colors ${
-              isActive ? 'text-white' : 'text-gray-600 hover:text-gray-900'
+            `relative z-10 inline-flex min-h-9 flex-1 items-center justify-center rounded-pill px-5 text-sm font-semibold transition-colors duration-200 focus-visible:ring-offset-gray-100 sm:flex-none ${
+              isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
             }`
           }
         >
@@ -37,8 +38,9 @@ export function Tabs({ items, layoutId = 'tabs-indicator' }: TabsProps) {
               {isActive ? (
                 <motion.span
                   layoutId={reduceMotion ? undefined : layoutId}
-                  className="absolute inset-0 rounded-pill bg-blue-600"
-                  transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  aria-hidden
+                  className="absolute inset-0 rounded-pill bg-white shadow-sm"
+                  transition={{ type: 'spring', stiffness: 420, damping: 34 }}
                 />
               ) : null}
               <span className="relative">{item.label}</span>

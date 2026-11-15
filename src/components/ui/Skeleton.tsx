@@ -11,17 +11,20 @@ export function Skeleton({ className = '' }: SkeletonProps) {
   );
 }
 
-export function ReporteCardSkeleton() {
+export function ReporteCardSkeleton({ className = '' }: SkeletonProps) {
   return (
-    <div className="overflow-hidden rounded-card border border-gray-200 bg-white">
-      <Skeleton className="aspect-[4/3] w-full rounded-none" />
-      <div className="space-y-3 p-4">
-        <Skeleton className="h-5 w-28 rounded-pill" />
+    <div className={`rounded-[20px] bg-white p-2.5 shadow-sm ${className}`}>
+      <Skeleton className="aspect-[4/3] w-full rounded-card" />
+      <div className="space-y-3.5 px-2.5 pb-2.5 pt-4">
+        <div className="flex justify-between">
+          <Skeleton className="h-5 w-28 rounded-pill" />
+          <Skeleton className="h-5 w-16 rounded-pill" />
+        </div>
         <Skeleton className="h-4 w-full" />
         <Skeleton className="h-4 w-2/3" />
-        <div className="flex justify-between pt-1">
-          <Skeleton className="h-3 w-20" />
-          <Skeleton className="h-3 w-16" />
+        <div className="flex items-center justify-between pt-1">
+          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-9 w-16 rounded-pill" />
         </div>
       </div>
     </div>

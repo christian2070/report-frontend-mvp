@@ -17,38 +17,41 @@ export function AlertaButton({
   showCount = false,
 }: AlertaButtonProps) {
   const reduceMotion = useReducedMotion();
+  const actionLabel = jaAlertado ? 'Remover confirmação' : 'Confirmar problema';
+  const hasCount = showCount && typeof totalAlertas === 'number';
 
   return (
-    <button
+    <motion.button
       type="button"
-      aria-label={jaAlertado ? 'Remover confirmação' : 'Confirmar problema'}
+      aria-label={hasCount ? `${actionLabel} (${totalAlertas} confirmações)` : actionLabel}
       aria-pressed={jaAlertado}
       disabled={disabled}
+      whileTap={reduceMotion || disabled ? undefined : { scale: 0.94 }}
       onClick={(event) => {
         event.preventDefault();
         event.stopPropagation();
         onClick?.();
       }}
-      className={`group relative inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${
+      className={`relative z-10 inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-pill px-3 text-sm font-semibold transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:ring-offset-white ${
         jaAlertado
-          ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
-          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          ? 'bg-blue-600 text-white hover:bg-blue-700'
+          : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
       }`}
     >
-      {!jaAlertado && !reduceMotion ? (
-        <span
+      <motion.span
+        key={String(jaAlertado)}
+        initial={reduceMotion ? false : { scale: 0.6, rotate: -12 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: 'spring', stiffness: 500, damping: 18 }}
+        className="inline-flex"
+      >
+        <AlertTriangle
           aria-hidden
-          className="absolute inset-0 animate-pulse-ring rounded-full border border-orange-300/60"
+          className={`h-4 w-4 ${jaAlertado ? 'fill-white/25' : ''}`}
         />
-      ) : null}
+      </motion.span>
 
-      <AlertTriangle
-        className={`relative h-4 w-4 transition-all ${
-          jaAlertado ? 'fill-orange-500 text-orange-500' : ''
-        }`}
-      />
-
-      {showCount && typeof totalAlertas === 'number' ? (
+      {hasCount ? (
         <span className="relative inline-flex min-w-[1.25rem] justify-center overflow-hidden text-xs font-semibold tabular-nums">
           <AnimatePresence mode="popLayout" initial={false}>
             <motion.span
@@ -64,6 +67,6 @@ export function AlertaButton({
           </AnimatePresence>
         </span>
       ) : null}
-    </button>
+    </motion.button>
   );
 }

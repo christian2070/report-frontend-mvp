@@ -24,15 +24,15 @@ interface StatusBadgeProps {
 }
 
 const statusClasses: Record<StatusReporte, string> = {
-  [StatusReporte.ABERTO]: 'bg-yellow-100 text-yellow-800',
-  [StatusReporte.EM_ANDAMENTO]: 'bg-blue-100 text-blue-800',
-  [StatusReporte.RESOLVIDO]: 'bg-green-100 text-green-800',
+  [StatusReporte.ABERTO]: 'bg-amber-50 text-amber-800',
+  [StatusReporte.EM_ANDAMENTO]: 'bg-blue-50 text-blue-800',
+  [StatusReporte.RESOLVIDO]: 'bg-emerald-50 text-emerald-800',
 };
 
 export function StatusBadge({ status, className = '' }: StatusBadgeProps) {
   return (
     <span
-      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${statusClasses[status]} ${className}`}
+      className={`inline-flex rounded-full px-2.5 py-0.5 text-[11px] font-medium tracking-wide ${statusClasses[status]} ${className}`}
     >
       {statusLabels[status]}
     </span>
@@ -46,11 +46,11 @@ interface CategoriaBadgeProps {
 }
 
 const categoriaClasses: Record<CategoriaReporte, string> = {
-  [CategoriaReporte.ILUMINACAO]: 'bg-amber-100 text-amber-800',
-  [CategoriaReporte.BURACO_PAVIMENTACAO]: 'bg-orange-100 text-orange-800',
-  [CategoriaReporte.LIXO]: 'bg-lime-100 text-lime-800',
-  [CategoriaReporte.SINALIZACAO]: 'bg-purple-100 text-purple-800',
-  [CategoriaReporte.OUTROS]: 'bg-gray-100 text-gray-800',
+  [CategoriaReporte.ILUMINACAO]: 'bg-amber-50 text-amber-800',
+  [CategoriaReporte.BURACO_PAVIMENTACAO]: 'bg-orange-50 text-orange-800',
+  [CategoriaReporte.LIXO]: 'bg-lime-50 text-lime-800',
+  [CategoriaReporte.SINALIZACAO]: 'bg-violet-50 text-violet-800',
+  [CategoriaReporte.OUTROS]: 'bg-gray-100 text-gray-700',
 };
 
 export function CategoriaBadge({
@@ -60,7 +60,7 @@ export function CategoriaBadge({
 }: CategoriaBadgeProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium tracking-wide ${
         onPhoto
           ? 'bg-black/70 text-white backdrop-blur-sm'
           : categoriaClasses[categoria]

@@ -1,6 +1,6 @@
-import { MapPin } from 'lucide-react';
+import { AlertTriangle, ImageOff, MapPin } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router';
 
 import { CategoriaBadge, StatusBadge } from '@/components/ui/Badge';
@@ -22,48 +22,73 @@ export function ReporteCard({
   index = 0,
 }: ReporteCardProps) {
   const reduceMotion = useReducedMotion();
+  const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
+  const status = showResolvedBadge ? StatusReporte.RESOLVIDO : reporte.status;
 
   return (
     <motion.article
-      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, delay: Math.min(index * 0.05, 0.35), ease: [0.22, 1, 0.36, 1] }}
-      className="group overflow-hidden rounded-card border border-gray-200 bg-white shadow-soft transition-shadow duration-300 hover:shadow-lift"
+      transition={{
+        duration: 0.4,
+        delay: Math.min(index * 0.04, 0.28),
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      whileHover={reduceMotion ? undefined : { y: -2 }}
+      className="group relative flex flex-col rounded-[20px] bg-white p-2.5 shadow-sm transition-shadow duration-300 hover:shadow-soft has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-blue-500 has-[a:focus-visible]:ring-offset-2 has-[a:focus-visible]:ring-offset-gray-50"
     >
-      <Link to={`/reportes/${reporte.id}`} className="relative block overflow-hidden">
+      <div className="relative overflow-hidden rounded-card bg-gray-100">
         <img
           src={buildAssetUrl(reporte.foto)}
           alt={reporte.descricao}
-          className="aspect-[4/3] w-full object-cover transition-transform duration-300 ease-smooth group-hover:scale-[1.03]"
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setImageState('loaded')}
+          onError={() => setImageState('error')}
+          className={`aspect-[4/3] w-full object-cover transition-[transform,opacity] duration-500 ease-smooth group-hover:scale-[1.025] ${
+            imageState === 'loaded' ? 'opacity-100' : 'opacity-0'
+          }`}
         />
-        <div className="absolute left-3 top-3">
-          <CategoriaBadge categoria={reporte.categoria} onPhoto />
-        </div>
-      </Link>
-
-      <div className="space-y-3 p-4">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-1.5 text-caption">
-            <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden />
-            <span className="line-clamp-1">{reporte.localizacao}</span>
+        {imageState === 'loading' ? (
+          <div aria-hidden className="absolute inset-0 animate-pulse bg-gray-200" />
+        ) : null}
+        {imageState === 'error' ? (
+          <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+            <ImageOff className="h-6 w-6" aria-hidden />
           </div>
-          {showResolvedBadge || reporte.status === StatusReporte.RESOLVIDO ? (
-            <StatusBadge status={StatusReporte.RESOLVIDO} />
-          ) : null}
+        ) : null}
+      </div>
+
+      <div className="flex flex-1 flex-col gap-3.5 px-2.5 pb-2.5 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <CategoriaBadge categoria={reporte.categoria} />
+          <StatusBadge status={status} />
         </div>
 
-        <Link to={`/reportes/${reporte.id}`} className="block">
-          <p className="line-clamp-2 text-sm font-medium leading-relaxed text-gray-900">
+        <Link
+          to={`/reportes/${reporte.id}`}
+          className="block outline-none after:absolute after:inset-0 after:rounded-[20px] focus-visible:ring-0 focus-visible:ring-offset-0"
+        >
+          <p className="line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-gray-900">
             {reporte.descricao}
           </p>
         </Link>
 
-        <div className="flex items-center justify-between gap-3 border-t border-gray-100 pt-3">
-          <div className="min-w-0">
-            <p className="truncate text-xs font-medium text-gray-900">{reporte.autor.nome}</p>
-            <p className="text-caption">{reporte.totalAlertas} confirmações</p>
+        <div className="mt-auto flex min-h-9 items-center justify-between gap-3 pt-0.5">
+          <div className="flex min-w-0 items-center gap-1.5 text-sm text-gray-500">
+            <MapPin className="h-4 w-4 shrink-0 text-gray-400" aria-hidden />
+            <span className="truncate">{reporte.localizacao}</span>
           </div>
-          {actionSlot}
+
+          {actionSlot ?? (
+            <span
+              className="inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-gray-500 tabular-nums"
+              aria-label={`${reporte.totalAlertas} confirmações`}
+            >
+              <AlertTriangle className="h-4 w-4 text-gray-400" aria-hidden />
+              {reporte.totalAlertas}
+            </span>
+          )}
         </div>
       </div>
     </motion.article>

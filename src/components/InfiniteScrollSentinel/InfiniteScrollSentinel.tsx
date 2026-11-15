@@ -16,11 +16,12 @@ export function InfiniteScrollSentinel({
   }
 
   return (
-    <div ref={sentinelRef} className="space-y-4 py-2">
+    <div ref={sentinelRef} className="py-2">
       {isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           <ReporteCardSkeleton />
-          <ReporteCardSkeleton />
+          <ReporteCardSkeleton className="hidden sm:block" />
+          <ReporteCardSkeleton className="hidden lg:block" />
         </div>
       ) : (
         <div className="h-8" aria-hidden />
