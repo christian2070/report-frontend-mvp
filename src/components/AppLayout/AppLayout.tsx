@@ -5,6 +5,7 @@ import { Link, NavLink } from "react-router";
 
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/contexts/AuthContext";
+import logo from "@/assets/logo.svg";
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
   `inline-flex min-h-11 items-center whitespace-nowrap text-sm font-medium transition-colors ${
@@ -27,9 +28,15 @@ export function AppLayout() {
         <div className="mx-auto grid max-w-5xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-4 py-3 sm:flex sm:gap-6 sm:py-4">
           <Link
             to="/feed"
-            className="whitespace-nowrap text-lg font-semibold text-gray-900 sm:mr-auto"
+            className="inline-flex min-h-11 shrink-0 items-center sm:mr-auto"
           >
-            Reportes urbanos
+            <img
+              src={logo}
+              alt="Reportes urbanos"
+              width={236}
+              height={48}
+              className="h-auto w-44 sm:w-48"
+            />
           </Link>
 
           <nav
