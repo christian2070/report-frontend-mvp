@@ -37,7 +37,7 @@ export function Tabs({ items, layoutId = 'tabs-indicator' }: TabsProps) {
               {isActive ? (
                 <motion.span
                   layoutId={reduceMotion ? undefined : layoutId}
-                  className="absolute inset-0 rounded-pill bg-black"
+                  className="absolute inset-0 rounded-pill bg-blue-600"
                   transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                 />
               ) : null}

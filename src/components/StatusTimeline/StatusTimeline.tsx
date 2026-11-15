@@ -31,7 +31,7 @@ export function StatusTimeline({ status }: StatusTimelineProps) {
               <span
                 aria-hidden
                 className={`absolute left-[11px] top-6 h-[calc(100%-8px)] w-0.5 ${
-                  isDone || isCurrent ? 'bg-black' : 'bg-gray-200'
+                  isDone || isCurrent ? 'bg-blue-600' : 'bg-gray-200'
                 }`}
               />
             ) : null}
@@ -40,16 +40,16 @@ export function StatusTimeline({ status }: StatusTimelineProps) {
               layout={!reduceMotion}
               className={`relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 ${
                 isDone
-                  ? 'border-black bg-black text-white'
+                  ? 'border-blue-600 bg-blue-600 text-white'
                   : isCurrent
-                    ? 'border-black bg-white'
+                    ? 'border-blue-600 bg-white'
                     : 'border-gray-200 bg-white'
               }`}
             >
               {isDone || (isCurrent && step === StatusReporte.RESOLVIDO) ? (
                 <Check className="h-3.5 w-3.5" aria-hidden />
               ) : isCurrent ? (
-                <span className="h-2 w-2 rounded-full bg-black" aria-hidden />
+                <span className="h-2 w-2 rounded-full bg-blue-600" aria-hidden />
               ) : null}
             </motion.span>
 

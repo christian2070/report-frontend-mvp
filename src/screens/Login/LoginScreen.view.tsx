@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router';
 import { Controller } from 'react-hook-form';
 
@@ -25,51 +26,61 @@ export function LoginScreenView({
   } = form;
 
   return (
-    <AuthLayout
-      title="Entrar"
-      subtitle="Acesse sua conta para acompanhar e reportar problemas."
-      footer={
-        <>
-          Não tem conta?{' '}
-          <Link
-            to="/cadastro"
-            className="font-semibold text-black underline decoration-transparent underline-offset-4 transition-colors hover:decoration-black"
-          >
-            Criar conta
-          </Link>
-        </>
-      }
-    >
-      <form className="space-y-4" onSubmit={onSubmit} noValidate>
-        <FloatingField
-          label="E-mail"
-          type="email"
-          autoComplete="email"
-          error={errors.email?.message}
-          {...register('email')}
-        />
+    <div className="relative">
+      <Link
+        to="/feed"
+        className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-blue-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      >
+        <ArrowLeft size={18} aria-hidden="true" />
+        Voltar para o feed
+      </Link>
 
-        <Controller
-          name="senha"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              label="Senha"
-              autoComplete="current-password"
-              error={errors.senha?.message}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              name={field.name}
-              ref={field.ref}
-            />
-          )}
-        />
+      <AuthLayout
+        title="Entrar"
+        subtitle="Entre para acessar o sistema de reportes"
+        footer={
+          <>
+            Não tem conta?{' '}
+            <Link
+              to="/cadastro"
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Criar conta
+            </Link>
+          </>
+        }
+      >
+        <form className="space-y-4" onSubmit={onSubmit} noValidate>
+          <FloatingField
+            label="Digite seu e-mail"
+            type="email"
+            autoComplete="email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-        <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
-          Entrar
-        </Button>
-      </form>
-    </AuthLayout>
+          <Controller
+            name="senha"
+            control={control}
+            render={({ field }) => (
+              <PasswordInput
+                label="Digite sua senha"
+                autoComplete="current-password"
+                error={errors.senha?.message}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
+              />
+            )}
+          />
+
+          <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
+            Entrar
+          </Button>
+        </form>
+      </AuthLayout>
+    </div>
   );
 }

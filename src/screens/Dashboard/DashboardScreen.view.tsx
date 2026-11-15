@@ -54,7 +54,7 @@ export function DashboardScreenView({ resumo, isLoading }: DashboardScreenViewPr
 
         <Link
           to="/feed"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-black underline decoration-transparent underline-offset-4 transition-colors hover:decoration-black"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:underline"
         >
           Ver reportes em aberto
           <ArrowRight className="h-4 w-4" aria-hidden />
@@ -88,7 +88,7 @@ export function DashboardScreenView({ resumo, isLoading }: DashboardScreenViewPr
               </div>
               <div className="h-2.5 overflow-hidden rounded-pill bg-gray-100">
                 <div
-                  className="h-full origin-left rounded-pill bg-black animate-bar-grow"
+                  className="h-full origin-left rounded-pill bg-blue-600 animate-bar-grow"
                   style={{ width: `${(total / maxCategoria) * 100}%` }}
                 />
               </div>

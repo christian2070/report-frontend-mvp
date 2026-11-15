@@ -130,7 +130,7 @@ export function FeedFilters(props: FeedFiltersProps) {
           <SlidersHorizontal className="h-4 w-4" aria-hidden />
           Filtros
           {activeFilters > 0 ? (
-            <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-black px-1.5 text-[10px] text-white">
+            <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-blue-600 px-1.5 text-[10px] text-white">
               {activeFilters}
             </span>
           ) : null}

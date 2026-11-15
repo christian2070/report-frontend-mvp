@@ -29,22 +29,22 @@ export function AlertaButton({
         event.stopPropagation();
         onClick?.();
       }}
-      className={`group relative inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-40 ${
+      className={`group relative inline-flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-medium transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${
         jaAlertado
-          ? 'border-black bg-black text-white'
-          : 'border-gray-200 bg-white text-gray-900 hover:border-black'
+          ? 'bg-orange-100 text-orange-700 hover:bg-orange-200'
+          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
       }`}
     >
       {!jaAlertado && !reduceMotion ? (
         <span
           aria-hidden
-          className="absolute inset-0 animate-pulse-ring rounded-pill border border-black/30"
+          className="absolute inset-0 animate-pulse-ring rounded-full border border-orange-300/60"
         />
       ) : null}
 
       <AlertTriangle
         className={`relative h-4 w-4 transition-all ${
-          jaAlertado ? 'fill-white text-white' : 'text-gray-900'
+          jaAlertado ? 'fill-orange-500 text-orange-500' : ''
         }`}
       />
 

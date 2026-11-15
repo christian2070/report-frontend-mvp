@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router';
 import { Controller } from 'react-hook-form';
 
@@ -25,67 +26,77 @@ export function CadastroScreenView({
   } = form;
 
   return (
-    <AuthLayout
-      title="Criar conta"
-      subtitle="Cadastre-se como cidadão e comece a reportar problemas da sua rua."
-      impact="Um clique. Um problema. Uma cidade melhor."
-      footer={
-        <>
-          Já tem conta?{' '}
-          <Link
-            to="/login"
-            className="font-semibold text-black underline decoration-transparent underline-offset-4 transition-colors hover:decoration-black"
-          >
-            Fazer login
-          </Link>
-        </>
-      }
-    >
-      <form className="space-y-4" onSubmit={onSubmit} noValidate>
-        <FloatingField
-          label="Nome"
-          autoComplete="name"
-          error={errors.nome?.message}
-          {...register('nome')}
-        />
+    <div className="relative">
+      <Link
+        to="/feed"
+        className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-blue-600 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+      >
+        <ArrowLeft size={18} aria-hidden="true" />
+        Voltar para o feed
+      </Link>
 
-        <FloatingField
-          label="E-mail"
-          type="email"
-          autoComplete="email"
-          error={errors.email?.message}
-          {...register('email')}
-        />
+      <AuthLayout
+        title="Criar conta"
+        subtitle="Crie sua conta de cidadão para reportar problemas"
+        impact="Um clique. Um problema. Uma cidade melhor."
+        footer={
+          <>
+            Já tem conta?{' '}
+            <Link
+              to="/login"
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Fazer login
+            </Link>
+          </>
+        }
+      >
+        <form className="space-y-4" onSubmit={onSubmit} noValidate>
+          <FloatingField
+            label="Digite seu nome"
+            autoComplete="name"
+            error={errors.nome?.message}
+            {...register('nome')}
+          />
 
-        <Controller
-          name="senha"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              label="Senha"
-              autoComplete="new-password"
-              showStrength
-              error={errors.senha?.message}
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              name={field.name}
-              ref={field.ref}
-            />
-          )}
-        />
+          <FloatingField
+            label="Digite seu e-mail"
+            type="email"
+            autoComplete="email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-        <FloatingField
-          label="Bairro / cidade (opcional)"
-          autoComplete="address-level2"
-          error={errors.bairro?.message}
-          {...register('bairro')}
-        />
+          <Controller
+            name="senha"
+            control={control}
+            render={({ field }) => (
+              <PasswordInput
+                label="Crie uma senha"
+                autoComplete="new-password"
+                showStrength
+                error={errors.senha?.message}
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                name={field.name}
+                ref={field.ref}
+              />
+            )}
+          />
 
-        <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
-          Criar conta
-        </Button>
-      </form>
-    </AuthLayout>
+          <FloatingField
+            label="Digite seu bairro ou cidade"
+            autoComplete="address-level2"
+            error={errors.bairro?.message}
+            {...register('bairro')}
+          />
+
+          <Button type="submit" className="w-full" size="lg" loading={isSubmitting}>
+            Criar conta
+          </Button>
+        </form>
+      </AuthLayout>
+    </div>
   );
 }

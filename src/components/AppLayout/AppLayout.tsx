@@ -8,7 +8,7 @@ import {
   UserRound,
 } from 'lucide-react';
 
-import { Logo } from '@/components/Logo/Logo';
+import logo from '@/assets/logo.svg';
 import { Avatar } from '@/components/ui/Avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { tipoUsuarioLabels } from '@/utils/labels';
@@ -16,13 +16,13 @@ import { tipoUsuarioLabels } from '@/utils/labels';
 const desktopNavClass = ({ isActive }: { isActive: boolean }) =>
   `relative inline-flex min-h-11 items-center px-1 text-sm font-semibold transition-colors ${
     isActive
-      ? 'text-black after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-black'
-      : 'text-gray-600 hover:text-black'
+      ? 'text-blue-600 after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 after:bg-blue-600'
+      : 'text-gray-600 hover:text-gray-900'
   }`;
 
 const mobileNavClass = ({ isActive }: { isActive: boolean }) =>
   `flex flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium ${
-    isActive ? 'text-black' : 'text-gray-400'
+    isActive ? 'text-blue-600' : 'text-gray-400'
   }`;
 
 export function AppLayout() {
@@ -56,8 +56,6 @@ export function AppLayout() {
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, [menuOpen]);
 
-  const showBottomNav = true;
-
   return (
     <div className="min-h-screen bg-gray-50">
       <header
@@ -69,7 +67,21 @@ export function AppLayout() {
         }}
       >
         <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-4 px-4">
-          <Logo size={scrolled ? 'sm' : 'md'} />
+          <Link
+            to="/feed"
+            className="inline-flex min-h-11 shrink-0 items-center"
+            aria-label="Reportes urbanos — ir para o feed"
+          >
+            <img
+              src={logo}
+              alt="Reportes urbanos"
+              width={236}
+              height={48}
+              className={`h-auto transition-all duration-300 ${
+                scrolled ? 'w-36 sm:w-40' : 'w-44 sm:w-48'
+              }`}
+            />
+          </Link>
 
           <nav
             aria-label="Navegação principal"
@@ -97,13 +109,13 @@ export function AppLayout() {
               <div className="hidden items-center gap-2 sm:flex">
                 <Link
                   to="/login"
-                  className="inline-flex min-h-9 items-center justify-center rounded-pill border border-black bg-white px-3 text-xs font-semibold text-black transition-all hover:bg-black hover:text-white"
+                  className="inline-flex min-h-9 items-center justify-center rounded-pill border border-blue-600 bg-white px-3 text-xs font-semibold text-blue-600 transition-all hover:bg-blue-50"
                 >
                   Entrar
                 </Link>
                 <Link
                   to="/cadastro"
-                  className="inline-flex min-h-9 items-center justify-center rounded-pill bg-black px-3 text-xs font-semibold text-white transition-all hover:bg-gray-900"
+                  className="inline-flex min-h-9 items-center justify-center rounded-pill bg-blue-600 px-3 text-xs font-semibold text-white transition-all hover:bg-blue-700"
                 >
                   Criar conta
                 </Link>
@@ -151,15 +163,10 @@ export function AppLayout() {
         </div>
       </header>
 
-      <main
-        className={`mx-auto max-w-5xl px-4 py-6 ${
-          showBottomNav ? 'pb-[calc(var(--bottom-nav-height)+1.5rem)] md:pb-6' : ''
-        }`}
-      >
+      <main className="mx-auto max-w-5xl px-4 py-6 pb-[calc(var(--bottom-nav-height)+1.5rem)] md:pb-6">
         <Outlet />
       </main>
 
-      {/* Bottom tab bar — mobile */}
       <nav
         aria-label="Navegação inferior"
         className="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/95 backdrop-blur-md md:hidden safe-bottom"
@@ -176,7 +183,7 @@ export function AppLayout() {
               to="/reportes/novo"
               className="relative -mt-5 flex flex-1 flex-col items-center justify-end gap-1 pb-2 text-[11px] font-medium text-gray-900"
             >
-              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black text-white shadow-lift transition-transform active:scale-95">
+              <span className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-lift transition-transform active:scale-95 hover:bg-blue-700">
                 <Plus className="h-6 w-6" aria-hidden />
               </span>
               Novo

@@ -24,7 +24,7 @@ export function Avatar({ name, size = 'md', className = '' }: AvatarProps) {
       role="img"
       aria-label={name || 'Usuário'}
       title={name || 'Usuário'}
-      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-black font-semibold text-white ${sizeClasses[size]} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center rounded-full bg-blue-100 font-semibold text-blue-700 ${sizeClasses[size]} ${className}`}
     >
       {getInitials(name)}
     </span>

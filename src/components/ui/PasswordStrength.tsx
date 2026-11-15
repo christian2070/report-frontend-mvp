@@ -26,7 +26,7 @@ export function PasswordStrength({ value }: PasswordStrengthProps) {
           <div
             key={index}
             className={`h-1 rounded-pill transition-colors duration-200 ${
-              index < score ? 'bg-black' : 'bg-gray-200'
+              index < score ? 'bg-blue-600' : 'bg-gray-200'
             }`}
           />
         ))}

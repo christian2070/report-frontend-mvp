@@ -4,15 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        black: 'var(--black)',
-        white: 'var(--white)',
-        gray: {
-          50: 'var(--gray-50)',
-          100: 'var(--gray-100)',
-          200: 'var(--gray-200)',
-          400: 'var(--gray-400)',
-          600: 'var(--gray-600)',
-          900: 'var(--gray-900)',
+        brand: {
+          DEFAULT: '#1765F5',
+          50: '#eff6ff',
+          100: '#dbeafe',
+          600: '#1765F5',
+          700: '#1d4ed8',
         },
       },
       fontFamily: {

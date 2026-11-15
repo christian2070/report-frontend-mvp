@@ -56,7 +56,7 @@ export function NovoReporteScreenView({
         <motion.div
           initial={reduceMotion ? false : { scale: 0.6, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="flex h-20 w-20 items-center justify-center rounded-full bg-black text-white"
+          className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-600 text-white"
         >
           <Check className="h-10 w-10" strokeWidth={2.5} />
         </motion.div>
@@ -84,7 +84,7 @@ export function NovoReporteScreenView({
         </div>
         <div className="h-1.5 overflow-hidden rounded-pill bg-gray-200">
           <motion.div
-            className="h-full origin-left rounded-pill bg-black"
+            className="h-full origin-left rounded-pill bg-blue-600"
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
           />
@@ -144,14 +144,14 @@ export function NovoReporteScreenView({
                       const file = event.dataTransfer.files?.[0] ?? null;
                       if (file) onPhotoChange(file);
                     }}
-                    className={`flex min-h-48 cursor-pointer flex-col items-center justify-center gap-3 rounded-card border-2 border-dashed px-4 py-8 text-center transition-colors hover:border-black hover:bg-gray-50 peer-focus-visible:border-black ${
-                      errors.foto ? 'border-black' : 'border-gray-200'
+                    className={`flex min-h-48 cursor-pointer flex-col items-center justify-center gap-3 rounded-card border-2 border-dashed px-4 py-8 text-center transition-colors hover:border-blue-400 hover:bg-blue-50 peer-focus-visible:border-blue-500 ${
+                      errors.foto ? 'border-red-400' : 'border-gray-300'
                     }`}
                   >
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                       <ImagePlus className="h-6 w-6" aria-hidden />
                     </span>
-                    <span className="text-sm font-semibold">
+                    <span className="text-sm font-semibold text-blue-600">
                       {previewUrl ? 'Trocar foto' : 'Arraste ou selecione uma foto'}
                     </span>
                     <span className="text-caption">JPG, PNG ou WebP</span>
@@ -217,7 +217,7 @@ export function NovoReporteScreenView({
                             }
                             className={`flex min-h-24 flex-col items-start gap-3 rounded-card border p-4 text-left transition-all active:scale-[0.98] ${
                               active
-                                ? 'border-black bg-black text-white'
+                                ? 'border-blue-600 bg-blue-600 text-white'
                                 : 'border-gray-200 bg-white hover:border-gray-400'
                             }`}
                           >

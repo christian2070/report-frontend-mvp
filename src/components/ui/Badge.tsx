@@ -1,4 +1,3 @@
-import { Check } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { CategoriaReporte, StatusReporte } from '@/types/enums';
@@ -12,7 +11,7 @@ interface BadgeProps {
 export function Badge({ children, className = '' }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-pill border border-gray-200 bg-white/95 px-2.5 py-1 text-xs font-semibold text-gray-900 backdrop-blur-sm ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${className}`}
     >
       {children}
     </span>
@@ -24,36 +23,18 @@ interface StatusBadgeProps {
   className?: string;
 }
 
+const statusClasses: Record<StatusReporte, string> = {
+  [StatusReporte.ABERTO]: 'bg-yellow-100 text-yellow-800',
+  [StatusReporte.EM_ANDAMENTO]: 'bg-blue-100 text-blue-800',
+  [StatusReporte.RESOLVIDO]: 'bg-green-100 text-green-800',
+};
+
 export function StatusBadge({ status, className = '' }: StatusBadgeProps) {
-  const label = statusLabels[status];
-
-  if (status === StatusReporte.ABERTO) {
-    return (
-      <span
-        className={`inline-flex items-center gap-1.5 rounded-pill border-2 border-black bg-white px-2.5 py-1 text-xs font-semibold text-black ${className}`}
-      >
-        <span className="h-2 w-2 rounded-full border border-black" aria-hidden />
-        {label}
-      </span>
-    );
-  }
-
-  if (status === StatusReporte.EM_ANDAMENTO) {
-    return (
-      <span
-        className={`inline-flex items-center gap-1.5 rounded-pill border-2 border-black bg-[repeating-linear-gradient(135deg,#000_0_4px,#fff_4px_8px)] px-2.5 py-1 text-xs font-semibold text-black ${className}`}
-      >
-        <span className="rounded-pill bg-white/90 px-1.5 py-0.5">{label}</span>
-      </span>
-    );
-  }
-
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-pill border-2 border-black bg-black px-2.5 py-1 text-xs font-semibold text-white ${className}`}
+      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${statusClasses[status]} ${className}`}
     >
-      <Check className="h-3.5 w-3.5" aria-hidden />
-      {label}
+      {statusLabels[status]}
     </span>
   );
 }
@@ -64,6 +45,14 @@ interface CategoriaBadgeProps {
   onPhoto?: boolean;
 }
 
+const categoriaClasses: Record<CategoriaReporte, string> = {
+  [CategoriaReporte.ILUMINACAO]: 'bg-amber-100 text-amber-800',
+  [CategoriaReporte.BURACO_PAVIMENTACAO]: 'bg-orange-100 text-orange-800',
+  [CategoriaReporte.LIXO]: 'bg-lime-100 text-lime-800',
+  [CategoriaReporte.SINALIZACAO]: 'bg-purple-100 text-purple-800',
+  [CategoriaReporte.OUTROS]: 'bg-gray-100 text-gray-800',
+};
+
 export function CategoriaBadge({
   categoria,
   className = '',
@@ -71,10 +60,10 @@ export function CategoriaBadge({
 }: CategoriaBadgeProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-pill px-2.5 py-1 text-xs font-semibold ${
+      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
         onPhoto
-          ? 'bg-black/80 text-white backdrop-blur-sm'
-          : 'border border-gray-200 bg-gray-100 text-gray-900'
+          ? 'bg-black/70 text-white backdrop-blur-sm'
+          : categoriaClasses[categoria]
       } ${className}`}
     >
       {categoriaLabels[categoria]}

@@ -19,8 +19,8 @@ export function FormField({ label, error, children, htmlFor }: FormFieldProps) {
       {children}
       {error ? (
         <p className="flex items-start gap-1.5 text-xs text-gray-900" role="alert">
-          <span className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-black" aria-hidden />
-          {error}
+          <span className="mt-0.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-red-500" aria-hidden />
+          <span className="text-red-600">{error}</span>
         </p>
       ) : null}
     </div>
