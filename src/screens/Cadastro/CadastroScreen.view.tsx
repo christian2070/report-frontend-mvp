@@ -32,12 +32,17 @@ export function CadastroScreenView({
 
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
           <FormField label="Nome" error={errors.nome?.message}>
-            <Input hasError={Boolean(errors.nome)} {...register('nome')} />
+            <Input
+              placeholder="Digite seu nome"
+              hasError={Boolean(errors.nome)}
+              {...register('nome')}
+            />
           </FormField>
 
           <FormField label="E-mail" error={errors.email?.message}>
             <Input
               type="email"
+              placeholder="Digite seu e-mail"
               hasError={Boolean(errors.email)}
               {...register('email')}
             />
@@ -45,13 +50,18 @@ export function CadastroScreenView({
 
           <FormField label="Senha" error={errors.senha?.message}>
             <PasswordInput
+              placeholder="Crie uma senha"
               hasError={Boolean(errors.senha)}
               {...register('senha')}
             />
           </FormField>
 
           <FormField label="Bairro / cidade (opcional)" error={errors.bairro?.message}>
-            <Input hasError={Boolean(errors.bairro)} {...register('bairro')} />
+            <Input
+              placeholder="Digite seu bairro ou cidade"
+              hasError={Boolean(errors.bairro)}
+              {...register('bairro')}
+            />
           </FormField>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>

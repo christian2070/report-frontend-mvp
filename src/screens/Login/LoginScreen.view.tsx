@@ -34,6 +34,7 @@ export function LoginScreenView({
           <FormField label="E-mail" error={errors.email?.message}>
             <Input
               type="email"
+              placeholder="Digite seu e-mail"
               hasError={Boolean(errors.email)}
               {...register('email')}
             />
@@ -41,6 +42,7 @@ export function LoginScreenView({
 
           <FormField label="Senha" error={errors.senha?.message}>
             <PasswordInput
+              placeholder="Digite sua senha"
               hasError={Boolean(errors.senha)}
               {...register('senha')}
             />
