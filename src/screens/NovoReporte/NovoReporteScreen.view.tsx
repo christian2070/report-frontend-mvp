@@ -1,22 +1,22 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Check, ImagePlus, Trash2 } from 'lucide-react';
-import { useId } from 'react';
-import { Controller } from 'react-hook-form';
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Check, ImagePlus, Trash2 } from "lucide-react";
+import { useId } from "react";
+import { Controller } from "react-hook-form";
 
-import { Button } from '@/components/ui/Button';
-import { FormField } from '@/components/ui/FormField';
-import { Input } from '@/components/ui/Input';
-import { PageTransition } from '@/components/ui/PageTransition';
-import { Textarea } from '@/components/ui/Textarea';
-import type { useNovoReporteScreen } from '@/screens/NovoReporte/NovoReporteScreen.hooks';
-import { categoriaIcons } from '@/utils/categoriaIcons';
-import { categoriaLabels, categoriaOptions } from '@/utils/labels';
+import { Button } from "@/components/ui/Button";
+import { FormField } from "@/components/ui/FormField";
+import { Input } from "@/components/ui/Input";
+import { PageTransition } from "@/components/ui/PageTransition";
+import { Textarea } from "@/components/ui/Textarea";
+import type { useNovoReporteScreen } from "@/screens/NovoReporte/NovoReporteScreen.hooks";
+import { categoriaIcons } from "@/utils/categoriaIcons";
+import { categoriaLabels, categoriaOptions } from "@/utils/labels";
 
 interface NovoReporteScreenViewProps {
-  form: ReturnType<typeof useNovoReporteScreen>['form'];
+  form: ReturnType<typeof useNovoReporteScreen>["form"];
   previewUrl: string | null;
   isSubmitting: boolean;
-  step: ReturnType<typeof useNovoReporteScreen>['step'];
+  step: ReturnType<typeof useNovoReporteScreen>["step"];
   showSuccess: boolean;
   canGoNext: boolean;
   onPhotoChange: (file: File | null) => void;
@@ -25,7 +25,7 @@ interface NovoReporteScreenViewProps {
   onSubmit: () => void;
 }
 
-const steps = ['Foto', 'Categoria', 'Detalhes', 'Revisão'];
+const steps = ["Foto", "Categoria", "Detalhes", "Revisão"];
 
 export function NovoReporteScreenView({
   form,
@@ -46,6 +46,7 @@ export function NovoReporteScreenView({
     formState: { errors },
   } = form;
   const photoInputId = useId();
+  const descriptionCounterId = useId();
   const reduceMotion = useReducedMotion();
   const values = watch();
   const progress = ((step + 1) / steps.length) * 100;
@@ -61,7 +62,9 @@ export function NovoReporteScreenView({
           <Check className="h-10 w-10" strokeWidth={2.5} />
         </motion.div>
         <h2 className="mt-6 text-title">Reporte enviado</h2>
-        <p className="mt-2 text-sm text-gray-600">Redirecionando para o feed…</p>
+        <p className="mt-2 text-sm text-gray-600">
+          Redirecionando para o feed…
+        </p>
       </div>
     );
   }
@@ -129,7 +132,7 @@ export function NovoReporteScreenView({
                         aria-label="Anexar foto do reporte"
                         onChange={(event) => {
                           const file = event.target.files?.[0] ?? null;
-                          event.target.value = '';
+                          event.target.value = "";
                           onPhotoChange(file);
                         }}
                       />
@@ -145,14 +148,16 @@ export function NovoReporteScreenView({
                       if (file) onPhotoChange(file);
                     }}
                     className={`flex min-h-48 cursor-pointer flex-col items-center justify-center gap-3 rounded-card border-2 border-dashed px-4 py-8 text-center transition-colors hover:border-blue-400 hover:bg-blue-50 peer-focus-visible:border-blue-500 ${
-                      errors.foto ? 'border-red-400' : 'border-gray-300'
+                      errors.foto ? "border-red-400" : "border-gray-300"
                     }`}
                   >
                     <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                       <ImagePlus className="h-6 w-6" aria-hidden />
                     </span>
                     <span className="text-sm font-semibold text-blue-600">
-                      {previewUrl ? 'Trocar foto' : 'Arraste ou selecione uma foto'}
+                      {previewUrl
+                        ? "Trocar foto"
+                        : "Arraste ou selecione uma foto"}
                     </span>
                     <span className="text-caption">JPG, PNG ou WebP</span>
                   </label>
@@ -163,7 +168,9 @@ export function NovoReporteScreenView({
                     <motion.div
                       initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={reduceMotion ? undefined : { opacity: 0, scale: 0.96 }}
+                      exit={
+                        reduceMotion ? undefined : { opacity: 0, scale: 0.96 }
+                      }
                       className="overflow-hidden rounded-card border border-gray-200"
                     >
                       <img
@@ -173,7 +180,7 @@ export function NovoReporteScreenView({
                       />
                       <div className="flex items-center justify-between gap-3 border-t border-gray-200 p-3">
                         <p className="truncate text-sm text-gray-600">
-                          {values.foto?.name || 'Foto anexada'}
+                          {values.foto?.name || "Foto anexada"}
                         </p>
                         <Button
                           type="button"
@@ -194,7 +201,9 @@ export function NovoReporteScreenView({
 
             {step === 1 ? (
               <div className="space-y-3">
-                <p className="text-sm font-medium text-gray-900">Escolha a categoria</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Escolha a categoria
+                </p>
                 {errors.categoria ? (
                   <p className="text-xs text-gray-900" role="alert">
                     {errors.categoria.message}
@@ -212,17 +221,17 @@ export function NovoReporteScreenView({
                           <button
                             key={option.value}
                             type="button"
-                            onClick={() =>
-                              field.onChange(option.value)
-                            }
+                            onClick={() => field.onChange(option.value)}
                             className={`flex min-h-24 flex-col items-start gap-3 rounded-card border p-4 text-left transition-all active:scale-[0.98] ${
                               active
-                                ? 'border-blue-600 bg-blue-600 text-white'
-                                : 'border-gray-200 bg-white hover:border-gray-400'
+                                ? "border-blue-600 bg-blue-600 text-white"
+                                : "border-gray-200 bg-white hover:border-gray-400"
                             }`}
                           >
                             <Icon className="h-6 w-6" aria-hidden />
-                            <span className="text-sm font-semibold">{option.label}</span>
+                            <span className="text-sm font-semibold">
+                              {option.label}
+                            </span>
                           </button>
                         );
                       })}
@@ -237,15 +246,27 @@ export function NovoReporteScreenView({
                 <FormField label="Descrição" error={errors.descricao?.message}>
                   <Textarea
                     rows={4}
+                    maxLength={300}
+                    aria-describedby={descriptionCounterId}
+                    className="h-32 !resize-none overflow-y-auto"
                     hasError={Boolean(errors.descricao)}
-                    {...register('descricao')}
+                    {...register("descricao")}
                     placeholder="Descreva o problema com clareza"
                   />
+                  <p
+                    id={descriptionCounterId}
+                    className="text-right text-xs text-gray-500"
+                  >
+                    {values.descricao?.length ?? 0}/300
+                  </p>
                 </FormField>
-                <FormField label="Localização" error={errors.localizacao?.message}>
+                <FormField
+                  label="Localização"
+                  error={errors.localizacao?.message}
+                >
                   <Input
                     hasError={Boolean(errors.localizacao)}
-                    {...register('localizacao')}
+                    {...register("localizacao")}
                     placeholder="Ex.: Rua das Flores, próximo ao nº 120"
                   />
                 </FormField>
@@ -254,7 +275,9 @@ export function NovoReporteScreenView({
 
             {step === 3 ? (
               <div className="space-y-4">
-                <p className="text-sm font-medium text-gray-900">Revise antes de enviar</p>
+                <p className="text-sm font-medium text-gray-900">
+                  Revise antes de enviar
+                </p>
                 {previewUrl ? (
                   <img
                     src={previewUrl}
@@ -266,16 +289,18 @@ export function NovoReporteScreenView({
                   <div>
                     <dt className="text-caption">Categoria</dt>
                     <dd className="font-medium">
-                      {values.categoria ? categoriaLabels[values.categoria] : '—'}
+                      {values.categoria
+                        ? categoriaLabels[values.categoria]
+                        : "—"}
                     </dd>
                   </div>
                   <div>
                     <dt className="text-caption">Descrição</dt>
-                    <dd className="font-medium">{values.descricao || '—'}</dd>
+                    <dd className="font-medium">{values.descricao || "—"}</dd>
                   </div>
                   <div>
                     <dt className="text-caption">Localização</dt>
-                    <dd className="font-medium">{values.localizacao || '—'}</dd>
+                    <dd className="font-medium">{values.localizacao || "—"}</dd>
                   </div>
                 </dl>
               </div>
@@ -298,7 +323,11 @@ export function NovoReporteScreenView({
               Continuar
             </Button>
           ) : (
-            <Button type="submit" loading={isSubmitting} disabled={!form.formState.isValid}>
+            <Button
+              type="submit"
+              loading={isSubmitting}
+              disabled={!form.formState.isValid}
+            >
               Enviar reporte
             </Button>
           )}
