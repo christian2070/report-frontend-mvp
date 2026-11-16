@@ -22,23 +22,66 @@ export function BottomSheet({ open, title, onClose, children, footer }: BottomSh
   const reduceMotion = useReducedMotion();
   const dragControls = useDragControls();
   const dialogRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!open) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
+      if (event.key === 'Escape') onCloseRef.current();
     };
 
     document.addEventListener('keydown', onKeyDown);
     document.body.style.overflow = 'hidden';
-    dialogRef.current?.focus();
+
+    // Foca o dialog só ao abrir — nunca em re-renders seguintes
+    const frame = window.requestAnimationFrame(() => {
+      const active = document.activeElement;
+      if (active instanceof HTMLElement && dialogRef.current?.contains(active)) {
+        return;
+      }
+      dialogRef.current?.focus();
+    });
 
     return () => {
+      window.cancelAnimationFrame(frame);
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = '';
     };
-  }, [open, onClose]);
+  }, [open]);
+
+  // Mantém o sheet acima do teclado virtual (iOS/Android)
+  useEffect(() => {
+    if (!open) return;
+
+    const dialog = dialogRef.current;
+    const viewport = window.visualViewport;
+    if (!dialog || !viewport) return;
+
+    const syncWithKeyboard = () => {
+      const keyboardOffset = Math.max(
+        0,
+        window.innerHeight - viewport.height - viewport.offsetTop,
+      );
+      const availableHeight = Math.max(240, viewport.height - 12);
+
+      dialog.style.maxHeight = `${availableHeight}px`;
+      dialog.style.bottom = `${keyboardOffset}px`;
+    };
+
+    syncWithKeyboard();
+    viewport.addEventListener('resize', syncWithKeyboard);
+    viewport.addEventListener('scroll', syncWithKeyboard);
+
+    return () => {
+      viewport.removeEventListener('resize', syncWithKeyboard);
+      viewport.removeEventListener('scroll', syncWithKeyboard);
+      dialog.style.maxHeight = '';
+      dialog.style.bottom = '';
+    };
+  }, [open]);
 
   return createPortal(
     <AnimatePresence>
@@ -51,7 +94,7 @@ export function BottomSheet({ open, title, onClose, children, footer }: BottomSh
             type="button"
             aria-label="Fechar filtros"
             className="absolute inset-0 bg-gray-900/40 backdrop-blur-[2px]"
-            onClick={onClose}
+            onClick={() => onCloseRef.current()}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -77,9 +120,10 @@ export function BottomSheet({ open, title, onClose, children, footer }: BottomSh
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={{ top: 0, bottom: 0.6 }}
             onDragEnd={(_, info) => {
-              if (info.offset.y > 120 || info.velocity.y > 600) onClose();
+              if (info.offset.y > 120 || info.velocity.y > 600) onCloseRef.current();
             }}
             className="relative z-10 flex max-h-[85vh] w-full flex-col rounded-t-[28px] bg-white shadow-lift outline-none safe-bottom focus-visible:ring-0 focus-visible:ring-offset-0"
+            style={{ position: 'fixed', left: 0, right: 0, bottom: 0 }}
           >
             <div
               className="flex shrink-0 cursor-grab touch-none justify-center pb-1 pt-3 active:cursor-grabbing"
@@ -92,12 +136,19 @@ export function BottomSheet({ open, title, onClose, children, footer }: BottomSh
               <h2 id="sheet-title" className="text-title">
                 {title}
               </h2>
-              <IconButton aria-label="Fechar" onClick={onClose} className="-mr-2">
+              <IconButton
+                aria-label="Fechar"
+                onClick={() => onCloseRef.current()}
+                className="-mr-2"
+              >
                 <X className="h-5 w-5" />
               </IconButton>
             </div>
 
-            <div className="flex-1 overflow-y-auto overscroll-contain px-5 pb-4">
+            <div
+              ref={bodyRef}
+              className="flex-1 overflow-y-auto overscroll-contain px-5 pb-4"
+            >
               {children}
             </div>
 

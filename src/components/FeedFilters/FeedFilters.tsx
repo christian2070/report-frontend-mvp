@@ -9,7 +9,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
@@ -82,22 +82,58 @@ function BairroSearch({
   onChange: (value: string) => void;
   className?: string;
 }) {
+  // Estado local evita perder o foco a cada tecla enquanto o feed recarrega
+  const [draft, setDraft] = useState(value);
+
+  useEffect(() => {
+    setDraft(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (draft === value) return;
+
+    const timer = window.setTimeout(() => {
+      onChange(draft);
+    }, 350);
+
+    return () => window.clearTimeout(timer);
+  }, [draft, value, onChange]);
+
+  const clear = () => {
+    setDraft('');
+    onChange('');
+  };
+
   return (
-    <div className={`relative ${className}`}>
+    <form
+      className={`relative ${className}`}
+      onSubmit={(event) => {
+        event.preventDefault();
+        onChange(draft);
+        (event.currentTarget.querySelector('input') as HTMLInputElement | null)?.blur();
+      }}
+    >
       <Search
         aria-hidden
         className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
       />
       <input
-        value={value}
+        type="search"
+        value={draft}
+        enterKeyHint="search"
+        inputMode="text"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="words"
+        spellCheck={false}
         aria-label="Filtrar por bairro"
         placeholder="Buscar por bairro"
-        onChange={(event) => onChange(event.target.value)}
-        className="h-10 w-full rounded-pill border border-gray-200 bg-white pl-10 pr-10 text-sm text-gray-900 transition-colors placeholder:text-gray-400 hover:border-gray-300 focus:border-blue-500 focus-visible:ring-4 focus-visible:ring-blue-100 focus-visible:ring-offset-0"
+        onChange={(event) => setDraft(event.target.value)}
+        className="h-11 w-full rounded-pill border border-gray-200 bg-white pl-10 pr-10 text-base text-gray-900 transition-colors placeholder:text-gray-400 hover:border-gray-300 focus:border-blue-500 focus-visible:ring-4 focus-visible:ring-blue-100 focus-visible:ring-offset-0 md:h-10 md:text-sm [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden"
       />
       <div className="absolute inset-y-0 right-1.5 flex items-center">
         <AnimatePresence>
-          {value ? (
+          {draft ? (
             <motion.button
               type="button"
               aria-label="Limpar bairro"
@@ -105,7 +141,7 @@ function BairroSearch({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.15 }}
-              onClick={() => onChange('')}
+              onClick={clear}
               className="inline-flex h-7 w-7 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
             >
               <X className="h-4 w-4" aria-hidden />
@@ -113,7 +149,7 @@ function BairroSearch({
           ) : null}
         </AnimatePresence>
       </div>
-    </div>
+    </form>
   );
 }
 
@@ -329,6 +365,12 @@ export function FeedFilters(props: FeedFiltersProps) {
           }
         >
           <div className="space-y-7 pt-1">
+            <SheetSection title="Bairro" radio={false}>
+              <div className="px-1 pt-1">
+                <BairroSearch value={bairro} onChange={onBairroChange} />
+              </div>
+            </SheetSection>
+
             {showOrdenacao ? (
               <SheetSection title="Ordenar por">
                 {ordenacaoOptions.map((option) => (
@@ -359,12 +401,6 @@ export function FeedFilters(props: FeedFiltersProps) {
                   onClick={() => onCategoriaChange(option.value)}
                 />
               ))}
-            </SheetSection>
-
-            <SheetSection title="Bairro" radio={false}>
-              <div className="px-1 pt-1">
-                <BairroSearch value={bairro} onChange={onBairroChange} />
-              </div>
             </SheetSection>
           </div>
         </BottomSheet>
