@@ -22,6 +22,7 @@ export function useCadastroScreen() {
 
   const form = useForm<CadastroFormValues>({
     resolver: yupResolver(cadastroSchema),
+    mode: 'onChange',
     defaultValues: {
       nome: '',
       email: '',

@@ -26,6 +26,7 @@ export function useLoginScreen() {
 
   const form = useForm<LoginFormValues>({
     resolver: yupResolver(loginSchema),
+    mode: 'onChange',
     defaultValues: {
       email: '',
       senha: '',

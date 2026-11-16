@@ -2,6 +2,8 @@
 
 Documento de integração. Copie para o projeto React como referência de configuração.
 
+Os novos endpoints de edição/exclusão de reportes e edição de perfil/senha estão documentados em [Edição de reportes e perfil](docs/edicao-reportes-perfil.md), incluindo payloads, permissões, erros e migration necessária.
+
 ---
 
 ## URLs (desenvolvimento local)

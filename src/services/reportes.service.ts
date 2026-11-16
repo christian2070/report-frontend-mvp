@@ -7,11 +7,14 @@ import type {
   ReporteListResponse,
   StatusUpdateRequest,
   StatusUpdateResponse,
+  UpdateReporteFormData,
 } from '@/types/reporte.types';
 
-function buildReporteFormData(data: CreateReporteFormData): FormData {
+function buildReporteFormData(
+  data: CreateReporteFormData | UpdateReporteFormData,
+): FormData {
   const formData = new FormData();
-  formData.append('foto', data.foto);
+  if (data.foto) formData.append('foto', data.foto);
   formData.append('descricao', data.descricao);
   formData.append('categoria', data.categoria);
   formData.append('localizacao', data.localizacao);
@@ -47,5 +50,15 @@ export const reportesService = {
     return http
       .patch<StatusUpdateResponse>(`/reportes/${id}/status`, data)
       .then((res) => res.data);
+  },
+
+  update(id: string, data: UpdateReporteFormData) {
+    return http
+      .patch<Reporte>(`/reportes/${id}`, buildReporteFormData(data))
+      .then((res) => res.data);
+  },
+
+  remove(id: string) {
+    return http.delete<void>(`/reportes/${id}`).then((res) => res.data);
   },
 };

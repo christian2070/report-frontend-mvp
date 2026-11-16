@@ -1,9 +1,14 @@
 import { MapPin } from 'lucide-react';
+import { ReporteOwnerActions } from '@/components/ReporteOwnerActions/ReporteOwnerActions';
 
+import { StatusTimeline } from '@/components/StatusTimeline/StatusTimeline';
+import { AlertBox } from '@/components/ui/AlertBox';
+import { CategoriaBadge, StatusBadge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { CategoriaBadge } from '@/components/CategoriaBadge/CategoriaBadge';
-import { Spinner } from '@/components/ui/Spinner';
-import { StatusBadge } from '@/components/StatusBadge/StatusBadge';
+import { DetalheSkeleton } from '@/components/ui/Skeleton';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Modal } from '@/components/ui/Modal';
+import { PageTransition } from '@/components/ui/PageTransition';
 import type { useReporteDetalheScreen } from '@/screens/ReporteDetalhe/ReporteDetalheScreen.hooks';
 import { buildAssetUrl } from '@/utils/buildAssetUrl';
 
@@ -17,6 +22,9 @@ interface ReporteDetalheScreenViewProps {
   isUpdatingAlerta: boolean;
   isUpdatingStatus: boolean;
   nextStatusActionLabel: string | null;
+  confirmStatusOpen: boolean;
+  onOpenStatusConfirm: () => void;
+  onCloseStatusConfirm: () => void;
   onToggleAlerta: () => void;
   onUpdateStatus: () => void;
 }
@@ -35,94 +43,143 @@ export function ReporteDetalheScreenView({
   isUpdatingAlerta,
   isUpdatingStatus,
   nextStatusActionLabel,
+  confirmStatusOpen,
+  onOpenStatusConfirm,
+  onCloseStatusConfirm,
   onToggleAlerta,
   onUpdateStatus,
 }: ReporteDetalheScreenViewProps) {
   if (isLoading) {
-    return (
-      <div className="flex justify-center py-16">
-        <Spinner size="lg" />
-      </div>
-    );
+    return <DetalheSkeleton />;
   }
 
   if (!reporte) {
     return (
-      <p className="py-10 text-center text-sm text-gray-500">
-        Reporte não encontrado
-      </p>
+      <EmptyState
+        title="Reporte não encontrado"
+        description="O registro pode ter sido removido ou o link está incorreto."
+      />
     );
   }
 
-  return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <img
-        src={buildAssetUrl(reporte.foto)}
-        alt={reporte.descricao}
-        className="aspect-[4/3] w-full rounded-xl object-cover"
-      />
+  const showCidadaoAction = isCidadao && !isAuthor && !isResolved;
+  const confirmLabel = nextStatusActionLabel
+    ? `${nextStatusActionLabel}?`
+    : 'Confirmar alteração?';
 
-      <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-6">
+  return (
+    <PageTransition className="mx-auto max-w-3xl space-y-6 pb-24 md:pb-6">
+      <div className="-mx-4 overflow-hidden sm:mx-0 sm:rounded-card">
+        <img
+          src={buildAssetUrl(reporte.foto)}
+          alt={reporte.descricao}
+          className="aspect-[16/10] w-full object-cover sm:rounded-card"
+        />
+      </div>
+
+      <div className="space-y-6 rounded-card border border-gray-200 bg-white p-5 sm:p-6">
         <div className="flex flex-wrap items-center gap-2">
           <CategoriaBadge categoria={reporte.categoria} />
           <StatusBadge status={reporte.status} />
         </div>
 
         <div>
-          <h1 className="text-xl font-semibold text-gray-900">Detalhe do reporte</h1>
-          <p className="mt-3 text-gray-700">{reporte.descricao}</p>
+          <h1 className="text-display text-[28px] sm:text-[32px]">Detalhe</h1>
+          <p className="mt-3 text-body text-gray-900">{reporte.descricao}</p>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <MapPin className="h-4 w-4" />
+        <div className="flex items-start gap-2 text-sm text-gray-600">
+          <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
           <span>{reporte.localizacao}</span>
         </div>
 
-        <div className="grid gap-2 text-sm text-gray-600 sm:grid-cols-2">
+        <div className="grid gap-3 border-y border-gray-100 py-4 text-sm sm:grid-cols-2">
           <p>
-            <span className="font-medium text-gray-800">Autor:</span> {reporte.autor.nome}
+            <span className="text-caption block">Autor</span>
+            <span className="font-medium text-gray-900">
+              {reporte.autor.nome}
+            </span>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Criado em:</span>{' '}
-            {formatDate(reporte.createdAt)}
+            <span className="text-caption block">Criado em</span>
+            <span className="font-medium text-gray-900">
+              {formatDate(reporte.createdAt)}
+            </span>
           </p>
           <p>
-            <span className="font-medium text-gray-800">Alertas:</span> {reporte.totalAlertas}
+            <span className="text-caption block">Confirmações</span>
+            <span className="font-medium text-gray-900">
+              {reporte.totalAlertas}
+            </span>
           </p>
         </div>
 
+        <div>
+          <h2 className="mb-4 text-title">Status</h2>
+          <StatusTimeline status={reporte.status} />
+        </div>
+
         {isCidadao ? (
-          <div className="border-t border-gray-100 pt-4">
+          <div className="space-y-3 border-t border-gray-100 pt-4">
             {isAuthor ? (
-              <p className="text-sm text-gray-500">
-                Você não pode confirmar seu próprio reporte.
-              </p>
+              <AlertBox>Você não pode confirmar seu próprio reporte.</AlertBox>
             ) : isResolved ? (
-              <p className="text-sm text-gray-500">Reporte já resolvido.</p>
+              <AlertBox>Reporte já resolvido.</AlertBox>
             ) : (
-              <Button
-                variant={reporte.jaAlertado ? 'secondary' : 'primary'}
-                disabled={isUpdatingAlerta}
-                onClick={onToggleAlerta}
-              >
-                {isUpdatingAlerta
-                  ? 'Atualizando...'
-                  : reporte.jaAlertado
+              <div className="hidden md:block">
+                <Button
+                  variant={reporte.jaAlertado ? 'secondary' : 'primary'}
+                  size="lg"
+                  className="w-full sm:w-auto"
+                  loading={isUpdatingAlerta}
+                  onClick={onToggleAlerta}
+                >
+                  {reporte.jaAlertado
                     ? 'Remover confirmação'
                     : 'Confirmar problema'}
-              </Button>
+                </Button>
+              </div>
             )}
           </div>
         ) : null}
 
         {isPrefeitura && nextStatusActionLabel ? (
           <div className="border-t border-gray-100 pt-4">
-            <Button disabled={isUpdatingStatus} onClick={onUpdateStatus}>
-              {isUpdatingStatus ? 'Atualizando...' : nextStatusActionLabel}
+            <Button
+              size="lg"
+              loading={isUpdatingStatus}
+              onClick={onOpenStatusConfirm}
+            >
+              {nextStatusActionLabel}
             </Button>
           </div>
         ) : null}
+        <ReporteOwnerActions reporte={reporte} />
       </div>
-    </div>
+
+      {showCidadaoAction ? (
+        <div className="fixed inset-x-0 bottom-[var(--bottom-nav-height)] z-40 border-t border-gray-200 bg-white/95 p-6 pb-8 backdrop-blur-md md:hidden">
+          <Button
+            variant={reporte.jaAlertado ? 'secondary' : 'primary'}
+            size="lg"
+            className="w-full"
+            loading={isUpdatingAlerta}
+            onClick={onToggleAlerta}
+          >
+            {reporte.jaAlertado ? 'Remover confirmação' : 'Confirmar problema'}
+          </Button>
+        </div>
+      ) : null}
+
+      <Modal
+        open={confirmStatusOpen}
+        title={confirmLabel}
+        description="Esta ação avança o status do reporte em um passo. Confirme para continuar."
+        confirmLabel="Confirmar"
+        loading={isUpdatingStatus}
+        onConfirm={onUpdateStatus}
+        onClose={onCloseStatusConfirm}
+      />
+    </PageTransition>
   );
 }

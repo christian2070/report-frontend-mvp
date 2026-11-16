@@ -27,6 +27,7 @@ export function useReporteDetalheScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdatingAlerta, setIsUpdatingAlerta] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [confirmStatusOpen, setConfirmStatusOpen] = useState(false);
 
   const loadReporte = async () => {
     if (!id) {
@@ -120,6 +121,7 @@ export function useReporteDetalheScreen() {
             : current,
         );
 
+        setConfirmStatusOpen(false);
         notify('success', 'Sucesso', 'Status atualizado com sucesso');
       },
     });
@@ -135,6 +137,9 @@ export function useReporteDetalheScreen() {
     isUpdatingAlerta,
     isUpdatingStatus,
     nextStatusActionLabel,
+    confirmStatusOpen,
+    onOpenStatusConfirm: () => setConfirmStatusOpen(true),
+    onCloseStatusConfirm: () => setConfirmStatusOpen(false),
     onToggleAlerta: handleToggleAlerta,
     onUpdateStatus: handleUpdateStatus,
   };

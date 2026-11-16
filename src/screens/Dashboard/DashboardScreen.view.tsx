@@ -1,5 +1,11 @@
-import { Spinner } from '@/components/ui/Spinner';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
+
+import { AnimatedCount } from '@/components/ui/AnimatedCount';
+import { DashboardSkeleton } from '@/components/ui/Skeleton';
+import { PageTransition } from '@/components/ui/PageTransition';
 import type { useDashboardScreen } from '@/screens/Dashboard/DashboardScreen.hooks';
+import { StatusReporte } from '@/types/enums';
 import { categoriaLabels, statusLabels } from '@/utils/labels';
 
 interface DashboardScreenViewProps {
@@ -9,11 +15,7 @@ interface DashboardScreenViewProps {
 
 export function DashboardScreenView({ resumo, isLoading }: DashboardScreenViewProps) {
   if (isLoading) {
-    return (
-      <div className="flex justify-center py-16">
-        <Spinner size="lg" />
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   if (!resumo) {
@@ -21,54 +23,72 @@ export function DashboardScreenView({ resumo, isLoading }: DashboardScreenViewPr
   }
 
   const maxCategoria = Math.max(...Object.values(resumo.porCategoria), 1);
+  const metrics = [
+    { key: 'total', label: 'Total', value: resumo.totalReportes },
+    {
+      key: StatusReporte.ABERTO,
+      label: statusLabels[StatusReporte.ABERTO],
+      value: resumo.porStatus[StatusReporte.ABERTO] ?? 0,
+    },
+    {
+      key: StatusReporte.EM_ANDAMENTO,
+      label: statusLabels[StatusReporte.EM_ANDAMENTO],
+      value: resumo.porStatus[StatusReporte.EM_ANDAMENTO] ?? 0,
+    },
+    {
+      key: StatusReporte.RESOLVIDO,
+      label: statusLabels[StatusReporte.RESOLVIDO],
+      value: resumo.porStatus[StatusReporte.RESOLVIDO] ?? 0,
+    },
+  ];
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Visão geral histórica dos reportes da cidade
-        </p>
-      </div>
-
-      <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <p className="text-sm text-gray-500">Total de reportes</p>
-        <p className="mt-1 text-3xl font-semibold text-gray-900">
-          {resumo.totalReportes}
-        </p>
-      </div>
-
-      <div>
-        <h2 className="mb-3 text-lg font-medium text-gray-900">Por status</h2>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {Object.entries(resumo.porStatus).map(([status, total]) => (
-            <div
-              key={status}
-              className="rounded-xl border border-gray-200 bg-white p-4"
-            >
-              <p className="text-sm text-gray-500">
-                {statusLabels[status as keyof typeof statusLabels]}
-              </p>
-              <p className="mt-1 text-2xl font-semibold text-gray-900">{total}</p>
-            </div>
-          ))}
+    <PageTransition className="space-y-8">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-display">Dashboard</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Visão geral histórica dos reportes da cidade
+          </p>
         </div>
+
+        <Link
+          to="/feed"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:underline"
+        >
+          Ver reportes em aberto
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Link>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {metrics.map((metric) => (
+          <div
+            key={metric.key}
+            className="rounded-card border border-gray-200 bg-white p-5 shadow-soft"
+          >
+            <p className="text-caption">{metric.label}</p>
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
+              <AnimatedCount value={metric.value} />
+            </p>
+          </div>
+        ))}
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-medium text-gray-900">Por categoria</h2>
-        <div className="space-y-3 rounded-xl border border-gray-200 bg-white p-6">
+        <h2 className="mb-4 text-title">Por categoria</h2>
+        <div className="space-y-4 rounded-card border border-gray-200 bg-white p-5 sm:p-6">
           {Object.entries(resumo.porCategoria).map(([categoria, total]) => (
             <div key={categoria}>
-              <div className="mb-1 flex items-center justify-between text-sm">
-                <span className="text-gray-700">
+              <div className="mb-2 flex items-center justify-between text-sm">
+                <span className="font-medium text-gray-900">
                   {categoriaLabels[categoria as keyof typeof categoriaLabels]}
                 </span>
-                <span className="font-medium text-gray-900">{total}</span>
+                <span className="tabular-nums text-gray-600">{total}</span>
               </div>
-              <div className="h-2 rounded-full bg-gray-100">
+              <div className="h-2.5 overflow-hidden rounded-pill bg-gray-100">
                 <div
-                  className="h-2 rounded-full bg-blue-600"
+                  className="h-full origin-left rounded-pill bg-blue-600 animate-bar-grow"
                   style={{ width: `${(total / maxCategoria) * 100}%` }}
                 />
               </div>
@@ -76,6 +96,6 @@ export function DashboardScreenView({ resumo, isLoading }: DashboardScreenViewPr
           ))}
         </div>
       </div>
-    </div>
+    </PageTransition>
   );
 }

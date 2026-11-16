@@ -31,3 +31,15 @@ export interface LoginResponse {
   token: string;
   usuario: UsuarioResumo;
 }
+
+export interface UpdateProfileRequest {
+  nome: string;
+  email: string;
+  bairro?: string;
+}
+
+export interface ChangePasswordRequest {
+  senhaAtual: string;
+  novaSenha: string;
+  confirmarNovaSenha: string;
+}

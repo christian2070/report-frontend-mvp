@@ -9,7 +9,12 @@ export function NovoReporteScreen() {
       form={screen.form}
       previewUrl={screen.previewUrl}
       isSubmitting={screen.isSubmitting}
+      step={screen.step}
+      showSuccess={screen.showSuccess}
+      canGoNext={screen.canGoNext}
       onPhotoChange={screen.handlePhotoChange}
+      onNext={screen.goNext}
+      onBack={screen.goBack}
       onSubmit={screen.handleSubmit}
     />
   );

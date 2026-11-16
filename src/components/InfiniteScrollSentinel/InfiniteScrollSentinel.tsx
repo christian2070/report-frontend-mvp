@@ -1,4 +1,4 @@
-import { Spinner } from '@/components/ui/Spinner';
+import { ReporteCardSkeleton } from '@/components/ui/Skeleton';
 
 interface InfiniteScrollSentinelProps {
   sentinelRef: React.RefObject<HTMLDivElement | null>;
@@ -16,8 +16,16 @@ export function InfiniteScrollSentinel({
   }
 
   return (
-    <div ref={sentinelRef} className="flex justify-center py-6">
-      {isLoading ? <Spinner /> : null}
+    <div ref={sentinelRef} className="py-2">
+      {isLoading ? (
+        <div className="grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+          <ReporteCardSkeleton />
+          <ReporteCardSkeleton className="hidden sm:block" />
+          <ReporteCardSkeleton className="hidden lg:block" />
+        </div>
+      ) : (
+        <div className="h-8" aria-hidden />
+      )}
     </div>
   );
 }

@@ -2,6 +2,90 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+:root {
+  --header-height: 64px;
+  --header-height-scrolled: 56px;
+  --bottom-nav-height: 72px;
+}
+
+@layer base {
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-gray-50 font-sans text-gray-900;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-white;
+  }
+
+  ::selection {
+    @apply bg-blue-600 text-white;
+  }
+}
+
+@layer utilities {
+  .text-display {
+    @apply text-[28px] font-bold leading-tight tracking-tight sm:text-[32px];
+  }
+
+  .text-title {
+    @apply text-lg font-semibold leading-snug sm:text-xl;
+  }
+
+  .text-body {
+    @apply text-sm leading-relaxed sm:text-base;
+  }
+
+  .text-caption {
+    @apply text-xs leading-normal text-gray-500;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+[data-sonner-toaster] [data-sonner-toast]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  transform-origin: left;
+  background: #1765f5;
+  animation: toast-progress linear forwards;
+  animation-duration: inherit;
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
