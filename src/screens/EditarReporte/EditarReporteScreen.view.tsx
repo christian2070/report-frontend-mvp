@@ -6,10 +6,9 @@ import { FormField } from '@/components/ui/FormField';
 import { Input } from '@/components/ui/Input';
 import { ImageUpload } from '@/components/ui/ImageUpload';
 import { PageTransition } from '@/components/ui/PageTransition';
-import { Select } from '@/components/ui/Select';
+import { CategoriaSelect } from '@/components/ui/CategoriaSelect';
 import { DetalheSkeleton } from '@/components/ui/Skeleton';
 import { Textarea } from '@/components/ui/Textarea';
-import { categoriaOptions } from '@/utils/labels';
 import type { useEditarReporteScreen } from './EditarReporteScreen.hooks';
 
 export function EditarReporteScreenView({
@@ -83,18 +82,18 @@ export function EditarReporteScreenView({
             htmlFor="editar-categoria"
             error={errors.categoria?.message}
           >
-            <Select
-              id="editar-categoria"
-              {...register('categoria')}
-              hasError={Boolean(errors.categoria)}
-              aria-invalid={Boolean(errors.categoria)}
-            >
-              {categoriaOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </Select>
+            <Controller
+              name="categoria"
+              control={control}
+              render={({ field }) => (
+                <CategoriaSelect
+                  {...field}
+                  id="editar-categoria"
+                  disabled={busy}
+                  hasError={Boolean(errors.categoria)}
+                />
+              )}
+            />
           </FormField>
           <FormField
             label="Descrição"

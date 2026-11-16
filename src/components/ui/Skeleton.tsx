@@ -13,9 +13,9 @@ export function Skeleton({ className = '' }: SkeletonProps) {
 
 export function ReporteCardSkeleton({ className = '' }: SkeletonProps) {
   return (
-    <div className={`rounded-[20px] bg-white p-2.5 shadow-sm ${className}`}>
-      <Skeleton className="aspect-[4/3] w-full rounded-card" />
-      <div className="space-y-3.5 px-2.5 pb-2.5 pt-4">
+    <div className={`min-w-0 rounded-[20px] bg-white p-2.5 shadow-sm ${className}`}>
+      <Skeleton className="aspect-[16/10] w-full rounded-card sm:aspect-[4/3]" />
+      <div className="space-y-3 px-2.5 pb-2.5 pt-3 sm:space-y-3.5 sm:pt-4">
         <div className="flex justify-between">
           <Skeleton className="h-5 w-28 rounded-pill" />
           <Skeleton className="h-5 w-16 rounded-pill" />

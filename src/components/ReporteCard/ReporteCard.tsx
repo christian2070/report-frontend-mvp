@@ -40,9 +40,9 @@ export function ReporteCard({
         ease: [0.22, 1, 0.36, 1],
       }}
       whileHover={reduceMotion ? undefined : { y: -2 }}
-      className="group relative flex flex-col rounded-[20px] bg-white p-2.5 shadow-sm transition-shadow duration-300 hover:shadow-soft has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-blue-500 has-[a:focus-visible]:ring-offset-2 has-[a:focus-visible]:ring-offset-gray-50"
+      className="group relative flex min-w-0 flex-col rounded-[20px] bg-white p-2.5 shadow-sm transition-shadow duration-300 hover:shadow-soft has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-blue-500 has-[a:focus-visible]:ring-offset-2 has-[a:focus-visible]:ring-offset-gray-50"
     >
-      <div className="relative overflow-hidden rounded-card bg-gray-100">
+      <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden rounded-card bg-gray-100 sm:aspect-[4/3]">
         <img
           src={buildAssetUrl(reporte.foto)}
           alt={reporte.descricao}
@@ -50,7 +50,7 @@ export function ReporteCard({
           decoding="async"
           onLoad={() => setImageState('loaded')}
           onError={() => setImageState('error')}
-          className={`aspect-[4/3] w-full object-cover transition-[transform,opacity] duration-500 ease-smooth group-hover:scale-[1.025] ${
+          className={`absolute inset-0 h-full w-full object-cover transition-[transform,opacity] duration-500 ease-smooth group-hover:scale-[1.025] ${
             imageState === 'loaded' ? 'opacity-100' : 'opacity-0'
           }`}
         />
@@ -67,7 +67,7 @@ export function ReporteCard({
         ) : null}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3.5 px-2.5 pb-2.5 pt-4">
+      <div className="flex min-w-0 flex-1 flex-col gap-3 px-2.5 pb-2.5 pt-3 sm:gap-3.5 sm:pt-4">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <CategoriaBadge categoria={reporte.categoria} />
           <StatusBadge status={status} />
@@ -77,7 +77,7 @@ export function ReporteCard({
           to={`/reportes/${reporte.id}`}
           className="block outline-none after:absolute after:inset-0 after:rounded-[20px] focus-visible:ring-0 focus-visible:ring-offset-0"
         >
-          <p className="line-clamp-2 text-[15px] font-semibold leading-snug tracking-tight text-gray-900">
+          <p className="line-clamp-2 break-words text-[15px] font-semibold leading-snug tracking-tight text-gray-900">
             {reporte.descricao}
           </p>
         </Link>

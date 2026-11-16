@@ -32,7 +32,7 @@ interface FeedScreenViewProps {
   onDeleted: (id: string) => void;
 }
 
-const gridClass = 'grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3';
+const gridClass = 'grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3';
 
 const listMotion = {
   initial: { opacity: 0, y: 10 },
