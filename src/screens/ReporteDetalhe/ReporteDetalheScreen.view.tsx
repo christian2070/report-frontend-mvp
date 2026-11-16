@@ -1,18 +1,18 @@
-import { MapPin } from 'lucide-react';
+import { MapPin } from "lucide-react";
 
-import { StatusTimeline } from '@/components/StatusTimeline/StatusTimeline';
-import { AlertBox } from '@/components/ui/AlertBox';
-import { CategoriaBadge, StatusBadge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { DetalheSkeleton } from '@/components/ui/Skeleton';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { Modal } from '@/components/ui/Modal';
-import { PageTransition } from '@/components/ui/PageTransition';
-import type { useReporteDetalheScreen } from '@/screens/ReporteDetalhe/ReporteDetalheScreen.hooks';
-import { buildAssetUrl } from '@/utils/buildAssetUrl';
+import { StatusTimeline } from "@/components/StatusTimeline/StatusTimeline";
+import { AlertBox } from "@/components/ui/AlertBox";
+import { CategoriaBadge, StatusBadge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
+import { DetalheSkeleton } from "@/components/ui/Skeleton";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Modal } from "@/components/ui/Modal";
+import { PageTransition } from "@/components/ui/PageTransition";
+import type { useReporteDetalheScreen } from "@/screens/ReporteDetalhe/ReporteDetalheScreen.hooks";
+import { buildAssetUrl } from "@/utils/buildAssetUrl";
 
 interface ReporteDetalheScreenViewProps {
-  reporte: ReturnType<typeof useReporteDetalheScreen>['reporte'];
+  reporte: ReturnType<typeof useReporteDetalheScreen>["reporte"];
   isLoading: boolean;
   isCidadao: boolean;
   isPrefeitura: boolean;
@@ -29,7 +29,7 @@ interface ReporteDetalheScreenViewProps {
 }
 
 function formatDate(value: string) {
-  return new Date(value).toLocaleString('pt-BR');
+  return new Date(value).toLocaleString("pt-BR");
 }
 
 export function ReporteDetalheScreenView({
@@ -64,7 +64,7 @@ export function ReporteDetalheScreenView({
   const showCidadaoAction = isCidadao && !isAuthor && !isResolved;
   const confirmLabel = nextStatusActionLabel
     ? `${nextStatusActionLabel}?`
-    : 'Confirmar alteração?';
+    : "Confirmar alteração?";
 
   return (
     <PageTransition className="mx-auto max-w-3xl space-y-6 pb-24 md:pb-6">
@@ -95,7 +95,9 @@ export function ReporteDetalheScreenView({
         <div className="grid gap-3 border-y border-gray-100 py-4 text-sm sm:grid-cols-2">
           <p>
             <span className="text-caption block">Autor</span>
-            <span className="font-medium text-gray-900">{reporte.autor.nome}</span>
+            <span className="font-medium text-gray-900">
+              {reporte.autor.nome}
+            </span>
           </p>
           <p>
             <span className="text-caption block">Criado em</span>
@@ -105,7 +107,9 @@ export function ReporteDetalheScreenView({
           </p>
           <p>
             <span className="text-caption block">Confirmações</span>
-            <span className="font-medium text-gray-900">{reporte.totalAlertas}</span>
+            <span className="font-medium text-gray-900">
+              {reporte.totalAlertas}
+            </span>
           </p>
         </div>
 
@@ -123,15 +127,15 @@ export function ReporteDetalheScreenView({
             ) : (
               <div className="hidden md:block">
                 <Button
-                  variant={reporte.jaAlertado ? 'secondary' : 'primary'}
+                  variant={reporte.jaAlertado ? "secondary" : "primary"}
                   size="lg"
                   className="w-full sm:w-auto"
                   loading={isUpdatingAlerta}
                   onClick={onToggleAlerta}
                 >
                   {reporte.jaAlertado
-                    ? 'Remover confirmação'
-                    : 'Confirmar problema'}
+                    ? "Remover confirmação"
+                    : "Confirmar problema"}
                 </Button>
               </div>
             )}
@@ -152,15 +156,15 @@ export function ReporteDetalheScreenView({
       </div>
 
       {showCidadaoAction ? (
-        <div className="fixed inset-x-0 bottom-[var(--bottom-nav-height)] z-40 border-t border-gray-200 bg-white/95 p-4 backdrop-blur-md md:hidden">
+        <div className="fixed inset-x-0 bottom-[var(--bottom-nav-height)] z-40 border-t border-gray-200 bg-white/95 p-6 pb-8 backdrop-blur-md md:hidden">
           <Button
-            variant={reporte.jaAlertado ? 'secondary' : 'primary'}
+            variant={reporte.jaAlertado ? "secondary" : "primary"}
             size="lg"
             className="w-full"
             loading={isUpdatingAlerta}
             onClick={onToggleAlerta}
           >
-            {reporte.jaAlertado ? 'Remover confirmação' : 'Confirmar problema'}
+            {reporte.jaAlertado ? "Remover confirmação" : "Confirmar problema"}
           </Button>
         </div>
       ) : null}

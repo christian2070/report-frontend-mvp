@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
-import { Link } from 'react-router';
+import type { ReactNode } from "react";
+import { Link } from "react-router";
 
-import logo from '@/assets/logo.svg';
+import logo from "@/assets/logo.svg";
 
 interface AuthLayoutProps {
   title: string;
@@ -16,7 +16,7 @@ export function AuthLayout({
   subtitle,
   children,
   footer,
-  impact = 'A cidade melhora quando alguém reporta.',
+  impact = "A cidade melhora quando alguém reporta.",
 }: AuthLayoutProps) {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
@@ -35,27 +35,15 @@ export function AuthLayout({
             {impact}
           </p>
           <p className="mt-4 max-w-sm text-sm text-white/80">
-            Reportes Urbanos conecta cidadãos e prefeitura para resolver problemas
-            da cidade.
+            Reportes Urbanos conecta cidadãos e prefeitura para resolver
+            problemas da cidade.
           </p>
         </div>
-        <p className="text-xs tracking-[0.16em] text-white/50">REPORTES URBANOS</p>
+        <div />
       </aside>
 
-      <div className="flex flex-col justify-center px-4 py-10 pt-20 sm:px-8 lg:pt-10">
+      <div className="flex flex-col justify-center px-6 sm:px-8 py-10 pt-14 lg:pt-10">
         <div className="mx-auto w-full max-w-md">
-          <div className="mb-8 lg:hidden">
-            <Link to="/feed" aria-label="Reportes urbanos — ir para o feed">
-              <img
-                src={logo}
-                alt="Reportes urbanos"
-                width={236}
-                height={48}
-                className="h-auto w-44"
-              />
-            </Link>
-          </div>
-
           <h1 className="text-display">{title}</h1>
           <p className="mt-2 text-sm text-gray-600">{subtitle}</p>
 
