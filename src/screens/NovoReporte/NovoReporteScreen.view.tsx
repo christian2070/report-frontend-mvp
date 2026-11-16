@@ -184,7 +184,7 @@ export function NovoReporteScreenView({
                         </p>
                         <Button
                           type="button"
-                          variant="ghost"
+                          variant="danger"
                           size="sm"
                           aria-label="Remover foto"
                           onClick={() => onPhotoChange(null)}

@@ -10,10 +10,8 @@ export function AppToaster() {
         classNames: {
           toast:
             'group border border-gray-200 bg-white text-gray-900 shadow-soft rounded-control font-sans relative overflow-hidden',
-          title: 'font-semibold text-gray-900',
+          title: 'font-semibold text-inherit',
           description: 'text-gray-600',
-          success: 'border-black',
-          error: 'border-black',
           warning: 'border-black',
           info: 'border-black',
         },

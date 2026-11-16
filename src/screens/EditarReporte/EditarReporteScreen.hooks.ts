@@ -83,6 +83,10 @@ export function useEditarReporteScreen() {
   }, [photo]);
 
   const canEdit = reporte ? canEditReporte(usuario, reporte) : false;
+  const navigateBack = () => {
+    if (hasPreviousPage) navigate(-1);
+    else navigate('/feed', { replace: true });
+  };
   const onPhotoChange = (file: File | null) => {
     if (pending.current) return;
     form.setValue('foto', file ?? undefined, {
@@ -99,7 +103,7 @@ export function useEditarReporteScreen() {
       action: async () => {
         await reportesService.update(id, values);
         notify('success', 'Sucesso', 'Reporte atualizado com sucesso');
-        navigate(`/reportes/${id}`, { replace: true });
+        navigateBack();
       },
       onError: (err) =>
         setSubmitError(
@@ -127,8 +131,7 @@ export function useEditarReporteScreen() {
     onSubmit,
     onCancel: () => {
       if (pending.current) return;
-      if (hasPreviousPage) navigate(-1);
-      else navigate('/feed', { replace: true });
+      navigateBack();
     },
   };
 }
