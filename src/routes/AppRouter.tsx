@@ -7,8 +7,11 @@ import { FeedScreen } from '@/screens/Feed/FeedScreen';
 import { LoginScreen } from '@/screens/Login/LoginScreen';
 import { NovoReporteScreen } from '@/screens/NovoReporte/NovoReporteScreen';
 import { ReporteDetalheScreen } from '@/screens/ReporteDetalhe/ReporteDetalheScreen';
+import { EditarReporteScreen } from '@/screens/EditarReporte/EditarReporteScreen';
+import { PerfilScreen } from '@/screens/Perfil/PerfilScreen';
 import {
   PublicOnlyRoute,
+  RequireAuth,
   RequireCidadao,
   RequirePrefeitura,
 } from '@/routes/guards';
@@ -23,11 +26,22 @@ export function AppRouter() {
 
       <Route element={<AppLayout />}>
         <Route path="/feed" element={<FeedScreen tab="ativos" />} />
-        <Route path="/feed/resolvidos" element={<FeedScreen tab="resolvidos" />} />
+        <Route
+          path="/feed/resolvidos"
+          element={<FeedScreen tab="resolvidos" />}
+        />
         <Route path="/reportes/:id" element={<ReporteDetalheScreen />} />
 
         <Route element={<RequireCidadao />}>
           <Route path="/reportes/novo" element={<NovoReporteScreen />} />
+          <Route
+            path="/reportes/:id/editar"
+            element={<EditarReporteScreen />}
+          />
+        </Route>
+
+        <Route element={<RequireAuth />}>
+          <Route path="/perfil" element={<PerfilScreen />} />
         </Route>
 
         <Route element={<RequirePrefeitura />}>

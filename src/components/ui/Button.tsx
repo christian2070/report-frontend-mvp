@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 import { Spinner } from '@/components/ui/Spinner';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'tertiary';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'tertiary' | 'danger';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,6 +13,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
+  danger:
+    'bg-red-600 text-white hover:bg-red-700 active:scale-[0.97] disabled:bg-red-300 disabled:text-white',
   primary:
     'bg-blue-600 text-white hover:bg-blue-700 active:scale-[0.97] disabled:bg-blue-300 disabled:text-white',
   secondary:
@@ -47,7 +49,9 @@ export function Button({
       aria-busy={loading || undefined}
       {...props}
     >
-      {loading ? <Spinner size="sm" className="border-current border-r-transparent" /> : null}
+      {loading ? (
+        <Spinner size="sm" className="border-current border-r-transparent" />
+      ) : null}
       {children}
     </button>
   );

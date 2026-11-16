@@ -2,7 +2,10 @@ import { CheckCircle2, Inbox, SearchX } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 import { AlertaButton } from '@/components/AlertaButton/AlertaButton';
-import { ClearFiltersLink, FeedFilters } from '@/components/FeedFilters/FeedFilters';
+import {
+  ClearFiltersLink,
+  FeedFilters,
+} from '@/components/FeedFilters/FeedFilters';
 import { InfiniteScrollSentinel } from '@/components/InfiniteScrollSentinel/InfiniteScrollSentinel';
 import { ReporteCard } from '@/components/ReporteCard/ReporteCard';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -26,6 +29,7 @@ interface FeedScreenViewProps {
   onBairroChange: (value: string) => void;
   onOrdenacaoChange: ReturnType<typeof useFeedScreen>['onOrdenacaoChange'];
   onToggleAlerta: (reporte: Reporte) => void;
+  onDeleted: (id: string) => void;
 }
 
 const gridClass = 'grid gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3';
@@ -50,6 +54,7 @@ export function FeedScreenView({
   onBairroChange,
   onOrdenacaoChange,
   onToggleAlerta,
+  onDeleted,
 }: FeedScreenViewProps) {
   const reduceMotion = useReducedMotion();
   const hasSearchFilters = Boolean(categoria) || Boolean(bairro.trim());
@@ -66,7 +71,8 @@ export function FeedScreenView({
       ? {
           icon: CheckCircle2,
           title: 'Nenhum reporte resolvido ainda',
-          description: 'Os problemas resolvidos pela prefeitura aparecerão aqui.',
+          description:
+            'Os problemas resolvidos pela prefeitura aparecerão aqui.',
         }
       : {
           icon: Inbox,
@@ -128,7 +134,13 @@ export function FeedScreenView({
             {Array.from({ length: 6 }).map((_, index) => (
               <ReporteCardSkeleton
                 key={index}
-                className={index >= 4 ? 'hidden lg:block' : index >= 2 ? 'hidden sm:block' : ''}
+                className={
+                  index >= 4
+                    ? 'hidden lg:block'
+                    : index >= 2
+                      ? 'hidden sm:block'
+                      : ''
+                }
               />
             ))}
           </motion.div>
@@ -177,6 +189,7 @@ export function FeedScreenView({
               <ReporteCard
                 key={reporte.id}
                 reporte={reporte}
+                onDeleted={onDeleted}
                 index={index}
                 showResolvedBadge={tab === 'resolvidos'}
                 actionSlot={

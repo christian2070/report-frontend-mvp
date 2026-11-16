@@ -66,3 +66,7 @@ export interface CreateReporteFormData {
   categoria: CategoriaReporte;
   localizacao: string;
 }
+
+export type UpdateReporteFormData = Omit<CreateReporteFormData, 'foto'> & {
+  foto?: File;
+};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
@@ -45,16 +45,21 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
   const { execute } = useLoadingAction();
 
   const [reportes, setReportes] = useState<Reporte[]>([]);
+  const deletedIds = useRef(new Set<string>());
+  const generation = useRef(0);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [categoria, setCategoria] = useState<CategoriaReporte | ''>('');
   const [bairro, setBairro] = useState('');
-  const [ordenacao, setOrdenacao] = useState<OrdenacaoFeed>(OrdenacaoFeed.ALERTAS);
+  const [ordenacao, setOrdenacao] = useState<OrdenacaoFeed>(
+    OrdenacaoFeed.ALERTAS,
+  );
 
   const hasMore = page < totalPages;
 
   const loadPage = async (nextPage: number, replace: boolean) => {
+    const requestGeneration = generation.current;
     await execute({
       setLoading: setIsLoading,
       action: async () => {
@@ -66,7 +71,10 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
           ordenacao,
         );
 
-        const items = response.data ?? [];
+        if (requestGeneration !== generation.current) return;
+        const items = (response.data ?? []).filter(
+          (item) => !deletedIds.current.has(item.id),
+        );
 
         setPage(response.page ?? nextPage);
         setTotalPages(response.totalPages ?? 1);
@@ -78,6 +86,7 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
   };
 
   const reloadFeed = async () => {
+    generation.current += 1;
     setReportes([]);
     setPage(1);
     setTotalPages(1);
@@ -161,5 +170,10 @@ export function useFeedScreen({ tab }: UseFeedScreenOptions) {
     onBairroChange: setBairro,
     onOrdenacaoChange: setOrdenacao,
     onToggleAlerta: handleToggleAlerta,
+    onDeleted: (id: string) => {
+      deletedIds.current.add(id);
+      setReportes((current) => current.filter((item) => item.id !== id));
+      void reloadFeed();
+    },
   };
 }

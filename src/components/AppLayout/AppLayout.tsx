@@ -27,7 +27,8 @@ const mobileNavClass = ({ isActive }: { isActive: boolean }) =>
   }`;
 
 export function AppLayout() {
-  const { isAuthenticated, isCidadao, isPrefeitura, logout, usuario } = useAuth();
+  const { isAuthenticated, isCidadao, isPrefeitura, logout, usuario } =
+    useAuth();
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -64,7 +65,9 @@ export function AppLayout() {
           scrolled ? 'shadow-soft' : ''
         }`}
         style={{
-          height: scrolled ? 'var(--header-height-scrolled)' : 'var(--header-height)',
+          height: scrolled
+            ? 'var(--header-height-scrolled)'
+            : 'var(--header-height)',
         }}
       >
         <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-2 px-4 sm:gap-4">
@@ -154,6 +157,15 @@ export function AppLayout() {
                         {usuario ? tipoUsuarioLabels[usuario.tipo] : ''}
                       </p>
                     </div>
+                    <Link
+                      to="/perfil"
+                      role="menuitem"
+                      onClick={() => setMenuOpen(false)}
+                      className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-50"
+                    >
+                      <UserRound className="h-4 w-4" aria-hidden />
+                      Editar Perfil
+                    </Link>
                     <button
                       type="button"
                       role="menuitem"
@@ -204,14 +216,10 @@ export function AppLayout() {
           ) : null}
 
           {isAuthenticated ? (
-            <button
-              type="button"
-              className="flex flex-1 flex-col items-center justify-center gap-1 text-[11px] font-medium text-gray-400"
-              onClick={() => setMenuOpen(true)}
-            >
+            <NavLink to="/perfil" className={mobileNavClass}>
               <UserRound className="h-5 w-5" aria-hidden />
               Conta
-            </button>
+            </NavLink>
           ) : null}
         </div>
       </nav>

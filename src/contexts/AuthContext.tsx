@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -44,22 +45,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [usuario, setUsuarioState] = useState<Usuario | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
 
-  const login = (token: string, usuarioResumo: UsuarioResumo) => {
+  const login = useCallback((token: string, usuarioResumo: UsuarioResumo) => {
     localStorage.setItem(TOKEN_STORAGE_KEY, token);
     setUsuarioState({
       ...usuarioResumo,
       email: '',
     });
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
     setUsuarioState(null);
-  };
+  }, []);
 
-  const setUsuario = (nextUsuario: Usuario) => {
+  const setUsuario = useCallback((nextUsuario: Usuario) => {
     setUsuarioState(nextUsuario);
-  };
+  }, []);
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -87,7 +88,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => {
       window.removeEventListener('auth:logout', handleLogout);
     };
-  }, []);
+  }, [logout]);
 
   const value = useMemo(
     () => ({
@@ -100,7 +101,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       logout,
       setUsuario,
     }),
-    [usuario, isInitializing],
+    [usuario, isInitializing, login, logout, setUsuario],
   );
 
   if (isInitializing) {

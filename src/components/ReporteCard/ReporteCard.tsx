@@ -7,12 +7,14 @@ import { CategoriaBadge, StatusBadge } from '@/components/ui/Badge';
 import type { Reporte } from '@/types/reporte.types';
 import { StatusReporte } from '@/types/enums';
 import { buildAssetUrl } from '@/utils/buildAssetUrl';
+import { ReporteOwnerActions } from '@/components/ReporteOwnerActions/ReporteOwnerActions';
 
 interface ReporteCardProps {
   reporte: Reporte;
   actionSlot?: ReactNode;
   showResolvedBadge?: boolean;
   index?: number;
+  onDeleted?: (id: string) => void;
 }
 
 export function ReporteCard({
@@ -20,9 +22,12 @@ export function ReporteCard({
   actionSlot,
   showResolvedBadge = false,
   index = 0,
+  onDeleted,
 }: ReporteCardProps) {
   const reduceMotion = useReducedMotion();
-  const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>('loading');
+  const [imageState, setImageState] = useState<'loading' | 'loaded' | 'error'>(
+    'loading',
+  );
   const status = showResolvedBadge ? StatusReporte.RESOLVIDO : reporte.status;
 
   return (
@@ -50,7 +55,10 @@ export function ReporteCard({
           }`}
         />
         {imageState === 'loading' ? (
-          <div aria-hidden className="absolute inset-0 animate-pulse bg-gray-200" />
+          <div
+            aria-hidden
+            className="absolute inset-0 animate-pulse bg-gray-200"
+          />
         ) : null}
         {imageState === 'error' ? (
           <div className="absolute inset-0 flex items-center justify-center text-gray-400">
@@ -90,6 +98,7 @@ export function ReporteCard({
             </span>
           )}
         </div>
+        <ReporteOwnerActions reporte={reporte} onDeleted={onDeleted} />
       </div>
     </motion.article>
   );
