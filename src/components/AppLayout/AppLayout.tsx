@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 
 import logo from '@/assets/logo.svg';
+import logoCompact from '@/assets/logo-compact.svg';
 import { Avatar } from '@/components/ui/Avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { tipoUsuarioLabels } from '@/utils/labels';
@@ -66,18 +67,25 @@ export function AppLayout() {
           height: scrolled ? 'var(--header-height-scrolled)' : 'var(--header-height)',
         }}
       >
-        <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-4 px-4">
+        <div className="mx-auto flex h-full max-w-5xl items-center justify-between gap-2 px-4 sm:gap-4">
           <Link
             to="/feed"
             className="inline-flex min-h-11 shrink-0 items-center"
             aria-label="Reportes urbanos — ir para o feed"
           >
             <img
+              src={logoCompact}
+              alt="Reportes urbanos"
+              width={48}
+              height={48}
+              className="h-10 w-10 sm:hidden"
+            />
+            <img
               src={logo}
               alt="Reportes urbanos"
               width={236}
               height={48}
-              className={`h-auto transition-all duration-300 ${
+              className={`hidden h-auto transition-all duration-300 sm:block ${
                 scrolled ? 'w-36 sm:w-40' : 'w-44 sm:w-48'
               }`}
             />
@@ -106,18 +114,18 @@ export function AppLayout() {
 
           <div className="flex items-center gap-2">
             {!isAuthenticated ? (
-              <div className="hidden items-center gap-2 sm:flex">
-                <Link
-                  to="/login"
-                  className="inline-flex min-h-9 items-center justify-center rounded-pill border border-blue-600 bg-white px-3 text-xs font-semibold text-blue-600 transition-all hover:bg-blue-50"
-                >
-                  Entrar
-                </Link>
+              <div className="flex shrink-0 items-center gap-2">
                 <Link
                   to="/cadastro"
-                  className="inline-flex min-h-9 items-center justify-center rounded-pill bg-blue-600 px-3 text-xs font-semibold text-white transition-all hover:bg-blue-700"
+                  className="inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-pill border border-blue-600 bg-white px-3 text-xs font-semibold text-blue-600 transition-all hover:bg-blue-50"
                 >
                   Criar conta
+                </Link>
+                <Link
+                  to="/login"
+                  className="inline-flex min-h-9 items-center justify-center whitespace-nowrap rounded-pill bg-blue-600 px-3 text-xs font-semibold text-white transition-all hover:bg-blue-700"
+                >
+                  Entrar
                 </Link>
               </div>
             ) : (
@@ -193,12 +201,7 @@ export function AppLayout() {
               <LayoutDashboard className="h-5 w-5" aria-hidden />
               Dashboard
             </NavLink>
-          ) : (
-            <NavLink to="/cadastro" className={mobileNavClass}>
-              <Plus className="h-5 w-5" aria-hidden />
-              Conta
-            </NavLink>
-          )}
+          ) : null}
 
           {isAuthenticated ? (
             <button
@@ -209,12 +212,7 @@ export function AppLayout() {
               <UserRound className="h-5 w-5" aria-hidden />
               Conta
             </button>
-          ) : (
-            <NavLink to="/login" className={mobileNavClass}>
-              <UserRound className="h-5 w-5" aria-hidden />
-              Entrar
-            </NavLink>
-          )}
+          ) : null}
         </div>
       </nav>
     </div>
