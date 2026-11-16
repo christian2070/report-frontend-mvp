@@ -26,17 +26,25 @@ export function BottomSheet({ open, title, onClose, children, footer }: BottomSh
   useEffect(() => {
     if (!open) return;
 
+    document.body.style.overflow = 'hidden';
+    dialogRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
     };
 
     document.addEventListener('keydown', onKeyDown);
-    document.body.style.overflow = 'hidden';
-    dialogRef.current?.focus();
 
     return () => {
       document.removeEventListener('keydown', onKeyDown);
-      document.body.style.overflow = '';
     };
   }, [open, onClose]);
 

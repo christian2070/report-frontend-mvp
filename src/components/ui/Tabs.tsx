@@ -19,7 +19,7 @@ export function Tabs({ items, layoutId = 'tabs-indicator', className = '' }: Tab
   return (
     <div
       role="tablist"
-      className={`relative flex w-full rounded-pill bg-gray-100 p-1 sm:inline-flex sm:w-auto ${className}`}
+      className={`relative flex w-full rounded-pill bg-gray-100 p-1 sm:inline-flex sm:w-fit ${className}`}
     >
       {items.map((item) => (
         <NavLink
